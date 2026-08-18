@@ -109,13 +109,10 @@
       margin-bottom: 0.75rem;
     }
 
-    .link-list button {
+    .link-list a {
       color: var(--accent);
-      background: none;
-      border: none;
-      text-align: left;
       font-size: 0.95rem;
-      cursor: pointer;
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
@@ -123,7 +120,7 @@
       transition: color 0.2s;
     }
 
-    .link-list button:hover {
+    .link-list a:hover {
       color: var(--accent-hover);
       text-decoration: underline;
     }
@@ -141,59 +138,13 @@
       padding: 0.35rem 0.75rem;
       border-radius: 6px;
       font-size: 0.85rem;
-      cursor: pointer;
+      text-decoration: none;
       transition: all 0.2s;
     }
 
     .pill:hover {
       border-color: var(--accent);
       color: var(--accent);
-    }
-
-    /* Global Embedded Document Viewer */
-    #viewer-container {
-      display: none;
-      margin-top: 2rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
-    }
-
-    .viewer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .viewer-header span {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--accent);
-    }
-
-    .btn-close {
-      background: var(--border);
-      color: var(--text);
-      border: none;
-      padding: 0.35rem 0.85rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background 0.2s;
-    }
-
-    .btn-close:hover {
-      background: #475569;
-    }
-
-    #doc-frame {
-      width: 100%;
-      height: 650px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: #ffffff;
     }
   </style>
 </head>
@@ -214,9 +165,7 @@
       <div class="section-title">Syllabus & Details</div>
       <ul class="link-list">
         <li>
-          <button type="button" onclick="loadContent('week01/course-outline.html', 'Course Outlines')">
-            🌐 Course Outlines
-          </button>
+          <a href="week01/course-outline.html" target="_blank">🌐 Course Outlines</a>
         </li>
       </ul>
     </section>
@@ -231,31 +180,25 @@
       <div class="section-title">Documents & Notes</div>
       <ul class="link-list">
         <li>
-          <button type="button" onclick="loadContent('week01/Week01_easynotes.html', 'Week 01 Easy Notes')">
-            📄 Week 01 Easy Notes
-          </button>
+          <a href="week01/Week01_easynotes.html" target="_blank">📄 Week 01 Easy Notes</a>
         </li>
         <li>
-          <button type="button" onclick="loadContent('week01/Week01_tasks.html', 'Week 01 Tasks Solutions')">
-            📝 Week 01 Tasks Solutions
-          </button>
+          <a href="week01/Week01_tasks.html" target="_blank">📝 Week 01 Tasks Solutions</a>
         </li>
         <li>
-          <button type="button" onclick="loadContent('week01/week-01-how-the-web-works.html', 'Article: How the Web Works')">
-            🌐 How the Web Works (Web Page)
-          </button>
+          <a href="week01/week-01-how-the-web-works.html" target="_blank">🌐 How the Web Works</a>
         </li>
       </ul>
 
       <div class="section-title">Task Snapshots & Diagrams</div>
       <div class="pill-grid">
-        <button class="pill" type="button" onclick="loadContent('week01/001.png', 'Preview: 001.png')">001.png</button>
-        <button class="pill" type="button" onclick="loadContent('week01/task_A.png', 'Preview: Task A')">Task A</button>
-        <button class="pill" type="button" onclick="loadContent('week01/task_C.png', 'Preview: Task C')">Task C</button>
-        <button class="pill" type="button" onclick="loadContent('week01/task_D.png', 'Preview: Task D')">Task D</button>
-        <button class="pill" type="button" onclick="loadContent('week01/task_E.png', 'Preview: Task E')">Task E</button>
-        <button class="pill" type="button" onclick="loadContent('week01/task_F.png', 'Preview: Task F')">Task F</button>
-        <button class="pill" type="button" onclick="loadContent('week01/task_G.png', 'Preview: Task G')">Task G</button>
+        <a class="pill" href="week01/001.png" target="_blank">001.png</a>
+        <a class="pill" href="week01/task_A.png" target="_blank">Task A</a>
+        <a class="pill" href="week01/task_C.png" target="_blank">Task C</a>
+        <a class="pill" href="week01/task_D.png" target="_blank">Task D</a>
+        <a class="pill" href="week01/task_E.png" target="_blank">Task E</a>
+        <a class="pill" href="week01/task_F.png" target="_blank">Task F</a>
+        <a class="pill" href="week01/task_G.png" target="_blank">Task G</a>
       </div>
     </section>
 
@@ -269,37 +212,7 @@
         Upcoming modules, tasks, and lab submissions will be linked here.
       </p>
     </section>
-
-    <!-- Shared Viewer Section -->
-    <div id="viewer-container">
-      <div class="viewer-header">
-        <span id="viewer-title">Document Preview</span>
-        <button class="btn-close" type="button" onclick="closeViewer()">Close Preview ✕</button>
-      </div>
-      <iframe id="doc-frame" src="" title="Content Preview"></iframe>
-    </div>
   </main>
-
-  <script>
-    function loadContent(filePath, title) {
-      const container = document.getElementById("viewer-container");
-      const frame = document.getElementById("doc-frame");
-      const titleElement = document.getElementById("viewer-title");
-
-      titleElement.textContent = title;
-      frame.src = filePath;
-      container.style.display = "block";
-      container.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function closeViewer() {
-      const container = document.getElementById("viewer-container");
-      const frame = document.getElementById("doc-frame");
-
-      frame.src = "";
-      container.style.display = "none";
-    }
-  </script>
 
 </body>
 </html>
