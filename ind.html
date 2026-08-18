@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Engineering | Imran Lateef Unar</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .course-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .badge-completed {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+    }
+
+    .badge-upcoming {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin: 0.75rem 0 0.4rem;
+    }
+
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .link-list a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .link-list a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Web Engineering Coursework</h1>
+    <p>Repository & Portfolio by <strong>IMRAN LATEEF UNAR</strong></p>
+  </header>
+
+  <main class="course-grid">
+    <!-- Week 01 -->
+    <section class="card">
+      <h2>
+        Week 01: How the Web Works
+        <span class="status-badge badge-completed">Completed</span>
+      </h2>
+
+      <div class="section-title">Documents & Notes</div>
+      <ul class="link-list">
+        <li><a href="week01/Week01_easynotes.html" target="_blank">📄 Week 01 Easy Notes</a></li>
+        <li><a href="week01/Week01_tasks.html" target="_blank">📝 Week 01 Tasks Page</a></li>
+        <li><a href="week01/week-01-how-the-web-works .mhtml" target="_blank">🌐 Web Archive: How the Web Works</a></li>
+      </ul>
+
+      <div class="section-title">Task Snapshots & Diagrams</div>
+      <div class="pill-grid">
+        <a class="pill" href="week01/001.png" target="_blank">001.png</a>
+        <a class="pill" href="week01/task_A.png" target="_blank">Task A</a>
+        <a class="pill" href="week01/task_C.png" target="_blank">Task C</a>
+        <a class="pill" href="week01/task_D.png" target="_blank">Task D</a>
+        <a class="pill" href="week01/task_E.png" target="_blank">Task E</a>
+        <a class="pill" href="week01/task_F.png" target="_blank">Task F</a>
+        <a class="pill" href="week01/task_G.png" target="_blank">Task G</a>
+      </div>
+    </section>
+
+    <!-- Week 02 Placeholder -->
+    <section class="card">
+      <h2>
+        Week 02
+        <span class="status-badge badge-upcoming">In Progress</span>
+      </h2>
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        Upcoming modules, tasks, and lab submissions will be linked here.
+      </p>
+    </section>
+  </main>
+
+</body>
+</html>
