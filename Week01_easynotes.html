@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Week 01 — How the Web Works | Easy Notes</title>
+<style>
+  :root{
+    --ink:#1a2027;
+    --ink-soft:#4b5563;
+    --paper:#f7f6f2;
+    --panel:#ffffff;
+    --line:#e4e1d8;
+    --navy:#1f3a5f;
+    --navy-deep:#132842;
+    --teal:#0f766e;
+    --teal-soft:#e6f4f2;
+    --amber:#b6752b;
+    --amber-soft:#fbeee0;
+    --code-bg:#12203a;
+    --code-ink:#dbe7ff;
+    --danger:#a3372b;
+    --danger-soft:#fbe9e6;
+    --good:#1c7a4d;
+    --good-soft:#e6f5ec;
+    --radius:10px;
+    --serif: "Fraunces", "Georgia", serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.65;
+    font-size:16.5px;
+  }
+
+  /* ============ LAYOUT ============ */
+  .shell{
+    display:grid;
+    grid-template-columns: 280px 1fr;
+    min-height:100vh;
+  }
+
+  nav.toc{
+    background:var(--navy-deep);
+    color:#cfe0f5;
+    padding:28px 22px 60px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  nav.toc .brand{
+    font-family:var(--serif);
+    font-size:1.5rem;
+    color:#fff;
+    margin-bottom:4px;
+    font-weight:600;
+  }
+  nav.toc .brand small{
+    display:block;
+    font-family:var(--sans);
+    font-size:0.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#7f9cc4;
+    margin-top:6px;
+    font-weight:600;
+  }
+  nav.toc ol{
+    list-style:none;
+    margin:28px 0 0;
+    padding:0;
+    counter-reset:toc;
+  }
+  nav.toc li{
+    counter-increment:toc;
+    margin-bottom:2px;
+  }
+  nav.toc a{
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    color:#a9c1de;
+    text-decoration:none;
+    font-size:0.86rem;
+    padding:8px 10px;
+    border-radius:8px;
+    transition:background .15s, color .15s;
+  }
+  nav.toc a::before{
+    content:counter(toc, decimal-leading-zero);
+    font-family:var(--mono);
+    font-size:0.72rem;
+    color:#5b7ba3;
+    flex-shrink:0;
+  }
+  nav.toc a:hover{ background:rgba(255,255,255,.06); color:#fff; }
+
+  main{
+    padding: 56px 64px 120px;
+    max-width: 900px;
+  }
+
+  header.hero{
+    margin-bottom:56px;
+    padding-bottom:32px;
+    border-bottom: 2px solid var(--line);
+  }
+  header.hero .kicker{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--teal);
+    font-weight:700;
+  }
+  header.hero h1{
+    font-family:var(--serif);
+    font-size:3rem;
+    line-height:1.05;
+    margin:.4em 0 .3em;
+    color:var(--navy-deep);
+  }
+  header.hero p.lede{
+    font-size:1.1rem;
+    color:var(--ink-soft);
+    max-width:640px;
+  }
+  .goal-box{
+    margin-top:24px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:4px solid var(--teal);
+    border-radius:var(--radius);
+    padding:16px 20px;
+    font-size:.96rem;
+  }
+  .goal-box b{color:var(--navy-deep);}
+
+  section.topic{
+    margin-bottom:64px;
+    scroll-margin-top:24px;
+  }
+  section.topic .eyebrow{
+    font-family:var(--mono);
+    font-size:.74rem;
+    color:var(--amber);
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  section.topic h2{
+    font-family:var(--serif);
+    font-size:2rem;
+    color:var(--navy-deep);
+    margin:0 0 18px;
+    border-bottom:2px solid var(--line);
+    padding-bottom:14px;
+  }
+  h3.sub{
+    font-family:var(--serif);
+    font-size:1.25rem;
+    color:var(--navy);
+    margin:34px 0 10px;
+  }
+  p{ color:var(--ink); }
+  p.small-note{font-size:.88rem;color:var(--ink-soft);}
+
+  /* two-column explain: layman vs technical */
+  .dual{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:20px 0 26px;
+  }
+  @media (max-width:760px){ .dual{grid-template-columns:1fr;} }
+  .dual .card{
+    border-radius:var(--radius);
+    padding:18px 20px;
+    border:1px solid var(--line);
+  }
+  .dual .layman{ background:var(--amber-soft); border-color:#eddcc0; }
+  .dual .tech{ background:var(--teal-soft); border-color:#c9e6e2; }
+  .dual .card .tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:.68rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:20px;
+    margin-bottom:10px;
+  }
+  .dual .layman .tag{ background:#e9c68c; color:#5c3b0e; }
+  .dual .tech .tag{ background:#8fd0c5; color:#0b3a34; }
+  .dual .card p{ margin:0; font-size:.94rem; }
+
+  /* term chip + definition */
+  .term{
+    background:#eef1f6;
+    border:1px solid #d7dee8;
+    border-radius:6px;
+    padding:1px 7px;
+    font-family:var(--mono);
+    font-size:.86em;
+    color:var(--navy-deep);
+    white-space:nowrap;
+  }
+
+  .def-grid{
+    display:grid;
+    grid-template-columns: 160px 1fr;
+    gap:10px 18px;
+    margin: 18px 0 8px;
+  }
+  .def-grid dt{
+    font-family:var(--mono);
+    font-weight:700;
+    color:var(--navy);
+    font-size:.9rem;
+    padding-top:2px;
+  }
+  .def-grid dd{
+    margin:0;
+    font-size:.94rem;
+    color:var(--ink-soft);
+    border-bottom:1px dashed var(--line);
+    padding-bottom:10px;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 28px;
+    font-size:.92rem;
+    background:var(--panel);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:0 0 0 1px var(--line);
+  }
+  th,td{
+    text-align:left;
+    padding:10px 14px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  thead th{
+    background:var(--navy-deep);
+    color:#fff;
+    font-weight:600;
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr:nth-child(even){ background:#fbfaf7; }
+  td code, li code{
+    font-family:var(--mono);
+    background:#eef1f6;
+    padding:1px 6px;
+    border-radius:4px;
+    font-size:.88em;
+    color:var(--navy-deep);
+  }
+
+  .badge{
+    display:inline-block;
+    font-family:var(--mono);
+    font-weight:700;
+    padding:2px 9px;
+    border-radius:20px;
+    font-size:.82em;
+  }
+  .b-2xx{ background:var(--good-soft); color:var(--good); }
+  .b-3xx{ background:#eaf0fb; color:#2b52a3; }
+  .b-4xx{ background:var(--amber-soft); color:#8a5416; }
+  .b-5xx{ background:var(--danger-soft); color:var(--danger); }
+
+  pre{
+    background:var(--code-bg);
+    color:var(--code-ink);
+    padding:20px 22px;
+    border-radius:var(--radius);
+    overflow-x:auto;
+    font-family:var(--mono);
+    font-size:.86rem;
+    line-height:1.6;
+    margin:18px 0 26px;
+  }
+  pre .tagname{ color:#7ec1ff; }
+  pre .attr{ color:#ffb673; }
+  pre .val{ color:#a7e7a0; }
+  pre .cmt{ color:#7f8fae; font-style:italic; }
+
+  .flow{
+    display:flex;
+    align-items:center;
+    gap:0;
+    flex-wrap:wrap;
+    margin:22px 0 30px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .flow .node{
+    background:var(--navy-deep);
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    font-size:.86rem;
+    font-weight:600;
+    text-align:center;
+  }
+  .flow .arrow{
+    flex:1 1 60px;
+    min-width:36px;
+    text-align:center;
+    color:var(--teal);
+    font-family:var(--mono);
+    font-size:.78rem;
+    padding:0 6px;
+  }
+  .flow .arrow span{ display:block; }
+
+  .url-anatomy{
+    background:var(--code-bg);
+    border-radius:var(--radius);
+    padding:26px 24px 20px;
+    margin:22px 0 30px;
+    overflow-x:auto;
+  }
+  .url-anatomy .url-line{
+    font-family:var(--mono);
+    font-size:1.05rem;
+    white-space:nowrap;
+    color:#e5edff;
+    margin-bottom:18px;
+  }
+  .url-anatomy .part{ padding:2px 3px; border-radius:4px; }
+  .p-protocol{ background:#3d5a8033; color:#8fc3ff; }
+  .p-host{ background:#3d805233; color:#8fffb0; }
+  .p-port{ background:#80713d33; color:#ffe28f; }
+  .p-path{ background:#803d7233; color:#ff9fe0; }
+  .p-query{ background:#803d3d33; color:#ff9f9f; }
+  .p-fragment{ background:#5b3d8033; color:#c79fff; }
+  .url-legend{
+    display:flex; flex-wrap:wrap; gap:10px;
+    font-family:var(--mono); font-size:.76rem;
+  }
+  .url-legend span{
+    padding:3px 9px; border-radius:20px;
+  }
+
+  .callout{
+    border-radius:var(--radius);
+    padding:16px 20px;
+    margin:20px 0;
+    font-size:.94rem;
+    border:1px solid;
+  }
+  .callout.warn{ background:var(--amber-soft); border-color:#e6cd9f; }
+  .callout.danger{ background:var(--danger-soft); border-color:#e3b6ae; }
+  .callout.good{ background:var(--good-soft); border-color:#a9d8bb; }
+  .callout .lbl{ font-weight:700; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; display:block; margin-bottom:5px; }
+  .callout.warn .lbl{ color:#8a5416; }
+  .callout.danger .lbl{ color:var(--danger); }
+  .callout.good .lbl{ color:var(--good); }
+
+  .house{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin:20px 0 30px;
+  }
+  @media (max-width:760px){ .house{grid-template-columns:1fr;} }
+  .house .brick{
+    border-radius:var(--radius);
+    padding:20px;
+    color:#fff;
+  }
+  .house .html{ background:#c8542f; }
+  .house .css{ background:#2b6ab0; }
+  .house .js{ background:#a3820f; }
+  .house .brick h4{ margin:0 0 6px; font-family:var(--serif); font-size:1.1rem; }
+  .house .brick p{ margin:0; font-size:.88rem; opacity:.95; }
+
+  ul.check{ list-style:none; padding:0; margin:16px 0; }
+  ul.check li{
+    padding:8px 0 8px 30px;
+    position:relative;
+    font-size:.94rem;
+    border-bottom:1px dashed var(--line);
+  }
+  ul.check li:last-child{ border-bottom:none; }
+  ul.check li::before{
+    content:"✓";
+    position:absolute; left:0; top:8px;
+    color:var(--teal); font-weight:700;
+    background:var(--teal-soft);
+    width:20px; height:20px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.72rem;
+  }
+
+  .glossary-list{
+    display:grid;
+    gap:2px;
+  }
+  .glossary-item{
+    display:grid;
+    grid-template-columns:210px 1fr;
+    gap:16px;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  @media (max-width:700px){ .glossary-item{grid-template-columns:1fr;} }
+  .glossary-item dt{
+    font-family:var(--mono);
+    font-weight:700;
+    color:var(--navy-deep);
+    font-size:.95rem;
+  }
+  .glossary-item dd{ margin:0; color:var(--ink-soft); font-size:.93rem; }
+
+  footer.page{
+    margin-top:80px;
+    padding-top:26px;
+    border-top:2px solid var(--line);
+    font-size:.82rem;
+    color:var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  @media (max-width:900px){
+    .shell{ grid-template-columns:1fr; }
+    nav.toc{ position:relative; height:auto; }
+    main{ padding:36px 22px 100px; }
+    header.hero h1{ font-size:2.1rem; }
+  }
+
+  @media print{
+    nav.toc{ display:none; }
+    .shell{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="toc">
+    <div class="brand">How the Web Works<small>Week 01 · Easy Notes</small></div>
+    <ol>
+      <li><a href="#client-server">Client &amp; Server</a></li>
+      <li><a href="#url-anatomy">Anatomy of a URL</a></li>
+      <li><a href="#http">HTTP Methods &amp; Status Codes</a></li>
+      <li><a href="#languages">The Three Web Languages</a></li>
+      <li><a href="#setup">Environment Setup</a></li>
+      <li><a href="#first-page">Your First HTML Page</a></li>
+      <li><a href="#devtools">DevTools Tour</a></li>
+      <li><a href="#glossary">Full Glossary</a></li>
+      <li><a href="#checklist">Self-Check Before Week 02</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="kicker">Web Engineering · Class Notes · Week 01</div>
+      <h1>How the Web Works</h1>
+      <p class="lede">A plain-English walkthrough of everything from class — with a simple, everyday analogy next to every technical explanation, so it clicks whether you've never touched code or you're already comfortable in a terminal.</p>
+      <div class="goal-box">
+        <b>By the end of this topic you should be able to:</b> explain client vs. server, read a URL, recognise HTTP methods and status codes, tell HTML/CSS/JS apart, have Node/Git/Live Server installed and verified, serve a page correctly (not as a <code>file://</code>), and use DevTools' Console + Network tabs without help.
+      </div>
+    </header>
+
+    <!-- ================= CLIENT & SERVER ================= -->
+    <section class="topic" id="client-server">
+      <div class="eyebrow">Concept 01</div>
+      <h2>Client &amp; Server</h2>
+      <p>Every website you have ever used is really a <em>conversation</em> between two computers: one that asks for something, and one that answers.</p>
+
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Think of a restaurant. You (the <b>customer</b>) sit down and tell the waiter what you want. The waiter walks to the <b>kitchen</b>, the kitchen prepares it, and the waiter brings the food back to you. You never go into the kitchen yourself — you just make a request and receive a response.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>The <span class="term">client</span> (your browser) sends an <span class="term">HTTP request</span> to a <span class="term">server</span> (a computer running somewhere else, often in a data centre). The server processes it — maybe talking to a <span class="term">database</span> — and sends back an <span class="term">HTTP response</span>, usually HTML, CSS, JS, or JSON data.</p>
+        </div>
+      </div>
+
+      <h3 class="sub">Who plays which role?</h3>
+      <div class="flow">
+        <div class="node">You (customer)</div>
+        <div class="arrow"><span>orders food →</span></div>
+        <div class="node">Waiter (browser)</div>
+        <div class="arrow"><span>request →</span></div>
+        <div class="node">Kitchen (server)</div>
+      </div>
+
+      <h3 class="sub">What actually happens when you open a site</h3>
+      <ol>
+        <li>You type <code>example.com</code> in the address bar.</li>
+        <li>The browser asks <span class="term">DNS</span> ("Domain Name System" — think of it as the internet's phone book): <em>"What is the IP address for example.com?"</em></li>
+        <li>DNS replies with an IP address, e.g. <code>93.184.216.34</code>.</li>
+        <li>The browser sends <code>HTTP GET /</code> to that address.</li>
+        <li>The server replies <code>200 OK</code> plus the HTML, CSS, and JS.</li>
+        <li>The browser draws ("renders") the page on your screen.</li>
+      </ol>
+
+      <div class="callout good">
+        <span class="lbl">Debugging habit for the whole course</span>
+        Whenever something breaks, first ask: <b>is this a client problem or a server problem?</b> A blank white page with a JS error in Console is usually a client problem. A page that never loads and shows a 500 status is a server problem.
+      </div>
+
+      <h3 class="sub">Role reference table</h3>
+      <table>
+        <thead><tr><th>Role</th><th>Runs where</th><th>Tools used in this course</th></tr></thead>
+        <tbody>
+          <tr><td><b>Client (frontend)</b></td><td>Inside the user's browser, on their own device</td><td>HTML, CSS, JavaScript, React</td></tr>
+          <tr><td><b>Server (backend)</b></td><td>A computer somewhere else (a remote machine / data centre)</td><td>Node.js, Express, MongoDB</td></tr>
+        </tbody>
+      </table>
+      <p class="small-note">Note: React runs on the <em>client</em>. Express runs on the <em>server</em>. They only ever talk to each other over HTTP — never directly.</p>
+    </section>
+
+    <!-- ================= URL ================= -->
+    <section class="topic" id="url-anatomy">
+      <div class="eyebrow">Concept 02</div>
+      <h2>Anatomy of a URL</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>A URL is like a full postal address. It says <em>how</em> to deliver the letter (protocol), <em>which building</em> (host), <em>which door</em> of that building (port), <em>which room</em> inside (path), any <em>special instructions</em> attached to the delivery (query), and where exactly to place it once you're inside the room (fragment).</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>A URL (Uniform Resource Locator) is a structured string that a browser parses into distinct parts, each telling the networking stack something different about how and where to fetch a resource.</p>
+        </div>
+      </div>
+
+      <div class="url-anatomy">
+        <div class="url-line">
+          <span class="part p-protocol">https</span>://<span class="part p-host">api.example.com</span><span class="part p-port">:443</span><span class="part p-path">/products/42</span><span class="part p-query">?sort=price</span><span class="part p-fragment">#reviews</span>
+        </div>
+        <div class="url-legend">
+          <span class="p-protocol">protocol — how to talk</span>
+          <span class="p-host">host — which computer</span>
+          <span class="p-port">port — which door</span>
+          <span class="p-path">path — which page/resource</span>
+          <span class="p-query">query — extra options</span>
+          <span class="p-fragment">fragment — spot on the page (browser-only)</span>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>Part</th><th>Meaning</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><code>https</code></td><td>Protocol</td><td>Encrypted HTTP — always use it in production</td></tr>
+          <tr><td><code>api.example.com</code></td><td>Host</td><td>DNS turns this into an IP address</td></tr>
+          <tr><td><code>:443</code></td><td>Port</td><td>Often hidden. <code>80</code>=HTTP, <code>443</code>=HTTPS. <code>5500</code>/<code>5173</code> = your local dev servers later.</td></tr>
+          <tr><td><code>/products/42</code></td><td>Path</td><td>Which specific resource you want</td></tr>
+          <tr><td><code>?sort=price</code></td><td>Query</td><td>Extra parameters; <code>&amp;</code> joins more of them</td></tr>
+          <tr><td><code>#reviews</code></td><td>Fragment</td><td>Browser-only — <b>never</b> sent to the server</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <span class="lbl">Easy to confuse</span>
+        The <b>fragment</b> (<code>#reviews</code>) looks like part of the address, but the server never even sees it — it's purely used by the browser to scroll to a section on the page you already loaded.
+      </div>
+    </section>
+
+    <!-- ================= HTTP ================= -->
+    <section class="topic" id="http">
+      <div class="eyebrow">Concept 03</div>
+      <h2>HTTP Methods &amp; Status Codes</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p><b>Methods</b> are like the verb in a sentence you say to the kitchen: "bring me the menu" (GET), "add this new dish" (POST), "change this dish" (PUT/PATCH), "remove this dish" (DELETE). <b>Status codes</b> are the waiter's one-line reply: "here you go" (200), "sorry, we don't have that" (404), or "the kitchen caught fire" (500).</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>An <span class="term">HTTP method</span> tells the server what operation to perform on a resource. A <span class="term">status code</span> is a 3-digit number the server returns describing the outcome of that request.</p>
+        </div>
+      </div>
+
+      <h3 class="sub">Methods</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Meaning</th><th>Real example</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td>Read</td><td>Load a page or a product list</td></tr>
+          <tr><td><code>POST</code></td><td>Create</td><td>Submit a signup form</td></tr>
+          <tr><td><code>PUT</code> / <code>PATCH</code></td><td>Update</td><td>Edit your profile</td></tr>
+          <tr><td><code>DELETE</code></td><td>Remove</td><td>Delete a to-do item</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub">Status codes worth memorising</h3>
+      <table>
+        <thead><tr><th>Range</th><th>Meaning</th><th>Common examples</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge b-2xx">2xx</span></td><td>Success</td><td><code>200</code> OK, <code>201</code> Created, <code>204</code> No Content</td></tr>
+          <tr><td><span class="badge b-3xx">3xx</span></td><td>Redirect / cache</td><td><code>301</code> Moved Permanently, <code>304</code> Not Modified</td></tr>
+          <tr><td><span class="badge b-4xx">4xx</span></td><td><b>Your</b> request is wrong</td><td><code>400</code> Bad Request, <code>401</code> Unauthorized, <code>403</code> Forbidden, <code>404</code> Not Found</td></tr>
+          <tr><td><span class="badge b-5xx">5xx</span></td><td>The server failed</td><td><code>500</code> Internal Server Error, <code>502</code> Bad Gateway, <code>503</code> Service Unavailable</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout good">
+        <span class="lbl">Habit for the whole course</span>
+        <b>4xx → fix the request</b> (you sent something wrong, e.g. mistyped URL or missing login). <b>5xx → fix the server</b> (the backend code or infrastructure is broken — not something you can fix from the browser).
+      </div>
+    </section>
+
+    <!-- ================= LANGUAGES ================= -->
+    <section class="topic" id="languages">
+      <div class="eyebrow">Concept 04</div>
+      <h2>The Three Web Languages</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Imagine building a house. <b>HTML</b> is the walls, rooms and doors — the raw structure. <b>CSS</b> is the paint, furniture and décor — how it looks. <b>JavaScript</b> is the electricity and smart switches — what happens when you interact with it (turning on a light, opening a garage door).</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>HTML defines <em>structure and meaning</em>, CSS defines <em>presentation</em>, and JavaScript defines <em>behaviour</em> — dynamic logic that runs in response to events like clicks or page loads.</p>
+        </div>
+      </div>
+
+      <div class="house">
+        <div class="brick html">
+          <h4>HTML</h4>
+          <p>Structure — what exists and what it means (headings, paragraphs, buttons, images).</p>
+        </div>
+        <div class="brick css">
+          <h4>CSS</h4>
+          <p>Presentation — colours, spacing, fonts, layout: how the structure looks.</p>
+        </div>
+        <div class="brick js">
+          <h4>JavaScript</h4>
+          <p>Behaviour — what happens on interaction: clicks, form validation, animations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SETUP ================= -->
+    <section class="topic" id="setup">
+      <div class="eyebrow">Concept 05</div>
+      <h2>Environment Setup</h2>
+      <p>Install these <b>in order</b>. Do not skip the <code>--version</code> checks — that step is what proves the terminal can actually "see" the tool you just installed.</p>
+
+      <ol>
+        <li><b>VS Code</b> or <b>Cursor</b> — your code editor</li>
+        <li><b>Live Server</b> + <b>Prettier</b> extensions inside the editor</li>
+        <li><b>Node.js LTS</b> — lets JavaScript run outside the browser</li>
+        <li><b>Git</b> — tracks changes to your code over time</li>
+        <li><b>GitHub account</b> — remote home for your Git repositories</li>
+        <li>Run all <code>--version</code> checks to confirm everything installed correctly</li>
+      </ol>
+
+      <h3 class="sub">Editor extensions explained</h3>
+      <table>
+        <thead><tr><th>Extension</th><th>Why you need it</th></tr></thead>
+        <tbody>
+          <tr><td><b>Live Server</b></td><td>Serves your HTML file over a real local address (<code>http://127.0.0.1:5500</code>) with auto-reload on save.</td></tr>
+          <tr><td><b>Prettier</b></td><td>Automatically formats your code on save so it stays clean and consistent.</td></tr>
+          <tr><td><b>ESLint</b></td><td>Warns you about JavaScript mistakes — used more from later weeks onward.</td></tr>
+          <tr><td><b>Auto Rename Tag</b></td><td>When you rename an opening HTML tag, it automatically renames the matching closing tag too.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub">Verify Node and Git</h3>
+      <pre><span class="cmt">// Run each line in your terminal and check the output</span>
+node --version         <span class="cmt">// expect v20.x.x or newer</span>
+npm --version          <span class="cmt">// expect 10.x.x or newer</span>
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git --version</pre>
+
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Checking <code>--version</code> is like turning the key in a car after installing a new battery — you don't assume it works, you actually start the engine and listen for it.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p><code>node</code> is the JavaScript runtime, <code>npm</code> is its package manager, and <code>git</code> is your version-control tool. Each ships its own CLI, and checking its version confirms it's correctly on your system's <span class="term">PATH</span>.</p>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <span class="lbl">Common trap</span>
+        If a command prints <code>command not found</code>, close and reopen your terminal first (it often just hasn't reloaded your PATH yet) before assuming the install failed.
+      </div>
+    </section>
+
+    <!-- ================= FIRST PAGE ================= -->
+    <section class="topic" id="first-page">
+      <div class="eyebrow">Concept 06</div>
+      <h2>Your First HTML Page — Fully Annotated</h2>
+      <p>Create a folder called <code>hello-web</code> containing a file called <code>index.html</code>:</p>
+
+      <pre>&lt;<span class="tagname">!DOCTYPE html</span>&gt;
+&lt;<span class="tagname">html</span> <span class="attr">lang</span>=<span class="val">"en"</span>&gt;
+&lt;<span class="tagname">head</span>&gt;
+  &lt;<span class="tagname">meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span> /&gt;
+  &lt;<span class="tagname">meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span> /&gt;
+  &lt;<span class="tagname">title</span>&gt;Hello Web&lt;/<span class="tagname">title</span>&gt;
+&lt;/<span class="tagname">head</span>&gt;
+&lt;<span class="tagname">body</span>&gt;
+  &lt;<span class="tagname">h1</span>&gt;Hello, Web Engineering&lt;/<span class="tagname">h1</span>&gt;
+  &lt;<span class="tagname">p</span>&gt;My name is &lt;<span class="tagname">strong</span>&gt;Your Name&lt;/<span class="tagname">strong</span>&gt; and this is my first page.&lt;/<span class="tagname">p</span>&gt;
+  &lt;<span class="tagname">button</span> <span class="attr">id</span>=<span class="val">"greet"</span>&gt;Click me&lt;/<span class="tagname">button</span>&gt;
+
+  &lt;<span class="tagname">script</span>&gt;
+    document.getElementById("greet").addEventListener("click", () =&gt; {
+      alert("The button works.");
+    });
+  &lt;/<span class="tagname">script</span>&gt;
+&lt;/<span class="tagname">body</span>&gt;
+&lt;/<span class="tagname">html</span>&gt;</pre>
+
+      <h3 class="sub">Every part explained</h3>
+      <div class="def-grid">
+        <dt>&lt;!DOCTYPE html&gt;</dt><dd>Tells the browser: "this document follows the HTML5 standard." Always the first line.</dd>
+        <dt>&lt;html lang="en"&gt;</dt><dd>The root element wrapping the whole page. <code>lang</code> tells screen readers and search engines which language the content is in.</dd>
+        <dt>charset="UTF-8"</dt><dd>Makes sure special characters (accents, symbols, emoji) display correctly instead of turning into garbled text.</dd>
+        <dt>viewport meta</dt><dd>Tells mobile browsers to scale the page to the device's actual screen width instead of shrinking a desktop-sized layout.</dd>
+        <dt>&lt;title&gt;</dt><dd>The text shown in the browser tab — not on the page itself.</dd>
+        <dt>&lt;h1&gt;, &lt;p&gt;, &lt;strong&gt;</dt><dd>Structural HTML tags: a top-level heading, a paragraph, and bold/important inline text.</dd>
+        <dt>&lt;button id="greet"&gt;</dt><dd>A clickable element. The <code>id</code> is a unique name JavaScript uses to find this exact element on the page.</dd>
+        <dt>&lt;script&gt;</dt><dd>Where JavaScript lives. Here it listens for a click on the button and shows an alert popup.</dd>
+      </div>
+
+      <h3 class="sub">Serving it correctly</h3>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Opening a file with <code>file://</code> is like reading a printed menu at home — it looks right, but the restaurant kitchen (the server) isn't actually involved, so anything that needs the kitchen (like fetching live data) simply won't work.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>Right-click the file → <b>Open with Live Server</b>. This serves it at a real address like <code>http://127.0.0.1:5500/hello-web/index.html</code>, using an actual local web server instead of the browser reading a raw file from disk.</p>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <span class="lbl">Important — never do this</span>
+        Do <b>not</b> open the file by double-clicking it (that loads it as <code>file:///C:/Users/.../index.html</code>). Many browser features (fetch requests, modules, some storage APIs) silently break under <code>file://</code>. Always use Live Server so the address bar starts with <code>http://</code>.
+      </div>
+
+      <table>
+        <thead><tr><th>Bad</th><th>Good</th></tr></thead>
+        <tbody>
+          <tr><td><code>file:///C:/Users/.../index.html</code> — some features break later</td><td><code>http://127.0.0.1:5500/...</code> — real website behaviour</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= DEVTOOLS ================= -->
+    <section class="topic" id="devtools">
+      <div class="eyebrow">Concept 07</div>
+      <h2>DevTools Tour</h2>
+      <p>Open with <code>F12</code> or <code>Ctrl+Shift+I</code> (<code>Cmd+Option+I</code> on Mac).</p>
+
+      <table>
+        <thead><tr><th>Tab</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td><b>Elements</b></td><td>See and live-edit the page's HTML/CSS. Edits are <b>temporary</b> — reloading the page throws them away, because you're only editing the browser's in-memory copy (the DOM), not the actual file on disk.</td></tr>
+          <tr><td><b>Console</b></td><td>See JavaScript errors, run <code>console.log()</code> output, and type quick JS commands directly.</td></tr>
+          <tr><td><b>Network</b></td><td>See every request the page made, its status code, size, and timing.</td></tr>
+          <tr><td><b>Application</b></td><td>Inspect localStorage, cookies, and cache — covered in later weeks.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>The <b>Network</b> tab is like a receipt showing every item the kitchen sent out and whether each one arrived fine. The <b>Console</b> tab is like a complaint log — if something went wrong in the kitchen, it's written there. The <b>Elements</b> tab is like rearranging the table decorations by hand — as soon as the table is reset (page reload), your changes are gone.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p><b>Elements</b> shows the live DOM tree, not the source file. <b>Console</b> is a JS REPL plus error/log output stream. <b>Network</b> lists every HTTP request/response with method, status, size and timing waterfall.</p>
+        </div>
+      </div>
+
+      <div class="callout good">
+        <span class="lbl">Quick check</span>
+        Reload your page → open <b>Network</b> → find <code>index.html</code> → its status should read <span class="badge b-2xx">200</span>. Then open <b>Console</b>, type <code>document.title</code>, and press Enter — it should print the text from your <code>&lt;title&gt;</code> tag.
+      </div>
+    </section>
+
+    <!-- ================= GLOSSARY ================= -->
+    <section class="topic" id="glossary">
+      <div class="eyebrow">Reference</div>
+      <h2>Full Glossary — Every Term Defined</h2>
+      <p>Every technical word used in this topic, in one place.</p>
+
+      <dl class="glossary-list">
+        <div class="glossary-item"><dt>Client</dt><dd>The program that makes a request — in web contexts, your browser.</dd></div>
+        <div class="glossary-item"><dt>Server</dt><dd>A computer (usually remote) that listens for requests and sends back responses.</dd></div>
+        <div class="glossary-item"><dt>Database</dt><dd>Where a server stores and retrieves persistent data (e.g. MongoDB).</dd></div>
+        <div class="glossary-item"><dt>HTTP</dt><dd>HyperText Transfer Protocol — the rules browsers and servers use to talk to each other.</dd></div>
+        <div class="glossary-item"><dt>HTTPS</dt><dd>HTTP encrypted with TLS/SSL, so data can't be read or tampered with in transit.</dd></div>
+        <div class="glossary-item"><dt>Request</dt><dd>A message the client sends asking the server to do something (read, create, update, delete).</dd></div>
+        <div class="glossary-item"><dt>Response</dt><dd>The message the server sends back, including a status code and often a body (HTML/JSON/etc).</dd></div>
+        <div class="glossary-item"><dt>DNS</dt><dd>Domain Name System — translates a human-readable domain (example.com) into a machine IP address.</dd></div>
+        <div class="glossary-item"><dt>IP address</dt><dd>A numeric address identifying a specific computer on a network.</dd></div>
+        <div class="glossary-item"><dt>Protocol</dt><dd>The agreed "language" used to communicate, e.g. <code>http</code> or <code>https</code>.</dd></div>
+        <div class="glossary-item"><dt>Host</dt><dd>The domain name / address of the server you're talking to.</dd></div>
+        <div class="glossary-item"><dt>Port</dt><dd>A numbered "door" on a computer that a specific service listens on (80 = HTTP, 443 = HTTPS).</dd></div>
+        <div class="glossary-item"><dt>Path</dt><dd>The part of the URL identifying which specific resource you want on that server.</dd></div>
+        <div class="glossary-item"><dt>Query string</dt><dd>Key-value pairs after <code>?</code> in a URL, used to pass extra parameters; <code>&amp;</code> joins multiple.</dd></div>
+        <div class="glossary-item"><dt>Fragment</dt><dd>The part after <code>#</code>; used only by the browser (e.g. to scroll to a section) and never sent to the server.</dd></div>
+        <div class="glossary-item"><dt>HTTP method</dt><dd>The verb of a request: GET, POST, PUT, PATCH, DELETE, etc.</dd></div>
+        <div class="glossary-item"><dt>Status code</dt><dd>A 3-digit number in the response describing the outcome (2xx success, 3xx redirect, 4xx client error, 5xx server error).</dd></div>
+        <div class="glossary-item"><dt>HTML</dt><dd>HyperText Markup Language — defines the structure and meaning of a web page's content.</dd></div>
+        <div class="glossary-item"><dt>CSS</dt><dd>Cascading Style Sheets — defines how the page looks (colour, layout, spacing, fonts).</dd></div>
+        <div class="glossary-item"><dt>JavaScript</dt><dd>The programming language that adds interactivity/behaviour to a web page.</dd></div>
+        <div class="glossary-item"><dt>DOM</dt><dd>Document Object Model — the browser's live, in-memory tree representation of the page's HTML.</dd></div>
+        <div class="glossary-item"><dt>Live Server</dt><dd>A VS Code extension that serves your folder over a real local HTTP address with auto-reload.</dd></div>
+        <div class="glossary-item"><dt>localhost / 127.0.0.1</dt><dd>Addresses that mean "this same computer" — used for local development servers.</dd></div>
+        <div class="glossary-item"><dt>Node.js</dt><dd>A runtime that lets JavaScript run outside the browser, e.g. on a server or in your terminal.</dd></div>
+        <div class="glossary-item"><dt>npm</dt><dd>Node Package Manager — installs and manages JavaScript libraries/packages.</dd></div>
+        <div class="glossary-item"><dt>Git</dt><dd>A version-control tool that tracks changes to your code over time.</dd></div>
+        <div class="glossary-item"><dt>GitHub</dt><dd>A website that hosts Git repositories remotely and enables collaboration.</dd></div>
+        <div class="glossary-item"><dt>Prettier</dt><dd>A code editor extension that auto-formats your code on save.</dd></div>
+        <div class="glossary-item"><dt>ESLint</dt><dd>A code editor extension that flags likely JavaScript mistakes as you type.</dd></div>
+        <div class="glossary-item"><dt>DevTools</dt><dd>The browser's built-in developer panel (Elements, Console, Network, Application, etc).</dd></div>
+        <div class="glossary-item"><dt>Console</dt><dd>The DevTools tab showing JS errors, logs, and a live JS command line.</dd></div>
+        <div class="glossary-item"><dt>Network tab</dt><dd>The DevTools tab listing every HTTP request the page made, with status and timing.</dd></div>
+        <div class="glossary-item"><dt>Elements tab</dt><dd>The DevTools tab showing the live DOM — editable, but never saved back to your file.</dd></div>
+        <div class="glossary-item"><dt>Application tab</dt><dd>The DevTools tab for inspecting localStorage, cookies, and cache.</dd></div>
+      </dl>
+    </section>
+
+    <!-- ================= CHECKLIST ================= -->
+    <section class="topic" id="checklist">
+      <div class="eyebrow">Self-Check</div>
+      <h2>Before Week 02</h2>
+      <ul class="check">
+        <li>I can explain client vs server in one sentence each.</li>
+        <li>I can name what <code>200</code>, <code>404</code>, and <code>500</code> mean.</li>
+        <li>I can label the parts of a URL on a real address bar.</li>
+        <li>Node, npm, and Git all print a version number when checked.</li>
+        <li>I can serve a page with Live Server.</li>
+        <li>I can open DevTools and use Console + Network without help.</li>
+      </ul>
+    </section>
+
+    <footer class="page">
+      <span>Web Engineering — Week 01 Easy Notes</span>
+      <span>Companion file: <code>week01_tasksheet.html</code></span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
