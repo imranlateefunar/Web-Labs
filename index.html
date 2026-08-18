@@ -75,6 +75,12 @@
       font-weight: 600;
     }
 
+    .badge-info {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
     .badge-completed {
       background: rgba(34, 197, 94, 0.15);
       color: #4ade80;
@@ -103,15 +109,13 @@
       margin-bottom: 0.75rem;
     }
 
-    .link-list button,
-    .link-list a {
+    .link-list button {
       color: var(--accent);
       background: none;
       border: none;
       text-align: left;
       font-size: 0.95rem;
       cursor: pointer;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
@@ -119,8 +123,7 @@
       transition: color 0.2s;
     }
 
-    .link-list button:hover,
-    .link-list a:hover {
+    .link-list button:hover {
       color: var(--accent-hover);
       text-decoration: underline;
     }
@@ -139,7 +142,6 @@
       border-radius: 6px;
       font-size: 0.85rem;
       cursor: pointer;
-      text-decoration: none;
       transition: all 0.2s;
     }
 
@@ -148,12 +150,14 @@
       color: var(--accent);
     }
 
-    /* Embedded Inline Document Viewer */
+    /* Global Embedded Document Viewer */
     #viewer-container {
       display: none;
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
     }
 
     .viewer-header {
@@ -188,7 +192,7 @@
       width: 100%;
       height: 650px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       background: #ffffff;
     }
   </style>
@@ -201,18 +205,24 @@
   </header>
 
   <main class="course-grid">
-    <!-- Week 01 -->
+    <!-- Course Information -->
     <section class="card">
       <h2>
-
-      <ul class="link-list">            <!-- Ensure you save your .mhtml page as .html so browsers can render it directly -->
-          <button type="button" onclick="loadContent('week01/course-outline.html', 'COURSE OUTLINES')">
-            🌐 COURSE OUTLINES
+        General Course Information
+        <span class="status-badge badge-info">Reference</span>
+      </h2>
+      <div class="section-title">Syllabus & Details</div>
+      <ul class="link-list">
+        <li>
+          <button type="button" onclick="loadContent('course-outline.html', 'Course Outlines')">
+            🌐 Course Outlines
           </button>
         </li>
       </ul>
-      </h2>
-      <span class="status-badge badge-completed">Completed</span>
+    </section>
+
+    <!-- Week 01 -->
+    <section class="card">
       <h2>
         Week 01: How the Web Works
         <span class="status-badge badge-completed">Completed</span>
@@ -226,12 +236,11 @@
           </button>
         </li>
         <li>
-          <button type="button" onclick="loadContent('week01/Week01_tasks.html', 'Week 01 Tasks Page')">
+          <button type="button" onclick="loadContent('week01/Week01_tasks.html', 'Week 01 Tasks Solutions')">
             📝 Week 01 Tasks Solutions
           </button>
         </li>
         <li>
-          <!-- Ensure you save your .mhtml page as .html so browsers can render it directly -->
           <button type="button" onclick="loadContent('week01/week-01-how-the-web-works.html', 'Article: How the Web Works')">
             🌐 How the Web Works (Web Page)
           </button>
@@ -248,15 +257,6 @@
         <button class="pill" type="button" onclick="loadContent('week01/task_F.png', 'Preview: Task F')">Task F</button>
         <button class="pill" type="button" onclick="loadContent('week01/task_G.png', 'Preview: Task G')">Task G</button>
       </div>
-
-      <!-- Live Viewer Container inside Week 01 -->
-      <div id="viewer-container">
-        <div class="viewer-header">
-          <span id="viewer-title">Document Preview</span>
-          <button class="btn-close" type="button" onclick="closeViewer()">Close Preview ✕</button>
-        </div>
-        <iframe id="doc-frame" src="" title="Content Preview"></iframe>
-      </div>
     </section>
 
     <!-- Week 02 Placeholder -->
@@ -269,6 +269,15 @@
         Upcoming modules, tasks, and lab submissions will be linked here.
       </p>
     </section>
+
+    <!-- Shared Viewer Section -->
+    <div id="viewer-container">
+      <div class="viewer-header">
+        <span id="viewer-title">Document Preview</span>
+        <button class="btn-close" type="button" onclick="closeViewer()">Close Preview ✕</button>
+      </div>
+      <iframe id="doc-frame" src="" title="Content Preview"></iframe>
+    </div>
   </main>
 
   <script>
