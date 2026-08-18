@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Week 01 — Task Sheet &amp; Submission | Web Engineering</title>
+<style>
+  :root{
+    --ink:#1a2027;
+    --ink-soft:#4b5563;
+    --paper:#f7f6f2;
+    --panel:#ffffff;
+    --line:#e4e1d8;
+    --navy:#1f3a5f;
+    --navy-deep:#132842;
+    --teal:#0f766e;
+    --teal-soft:#e6f4f2;
+    --amber:#b6752b;
+    --amber-soft:#fbeee0;
+    --code-bg:#12203a;
+    --code-ink:#dbe7ff;
+    --danger:#a3372b;
+    --danger-soft:#fbe9e6;
+    --good:#1c7a4d;
+    --good-soft:#e6f5ec;
+    --radius:10px;
+    --serif: "Fraunces", "Georgia", serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); line-height:1.6; font-size:16.5px;
+  }
+  main{ max-width:960px; margin:0 auto; padding:56px 28px 120px; }
+
+  header.hero{
+    margin-bottom:44px; padding-bottom:28px; border-bottom:2px solid var(--line);
+  }
+  header.hero .kicker{
+    font-family:var(--mono); font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--teal); font-weight:700;
+  }
+  header.hero h1{
+    font-family:var(--serif); font-size:2.6rem; line-height:1.08; margin:.4em 0 .3em; color:var(--navy-deep);
+  }
+  header.hero p{ color:var(--ink-soft); max-width:680px; font-size:1.02rem; }
+
+  .progress-bar{
+    display:flex; gap:6px; flex-wrap:wrap; margin-top:22px;
+  }
+  .progress-bar a{
+    font-family:var(--mono); font-size:.72rem; text-decoration:none;
+    background:var(--panel); border:1px solid var(--line); color:var(--navy);
+    padding:5px 10px; border-radius:20px;
+  }
+  .progress-bar a:hover{ background:var(--teal-soft); border-color:var(--teal); }
+
+  section.block{
+    margin-bottom:24px;
+  }
+  .block-head{
+    display:flex; align-items:baseline; gap:12px; margin: 46px 0 18px;
+  }
+  .block-head h2{
+    font-family:var(--serif); font-size:1.7rem; color:var(--navy-deep); margin:0;
+  }
+  .block-head .count{
+    font-family:var(--mono); font-size:.78rem; color:var(--ink-soft); background:var(--panel);
+    border:1px solid var(--line); padding:3px 10px; border-radius:20px;
+  }
+
+  .task-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px 26px;
+    margin-bottom:20px;
+    scroll-margin-top:20px;
+  }
+  .task-card .task-tag{
+    font-family:var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.1em;
+    font-weight:700; color:var(--amber); margin-bottom:6px; display:block;
+  }
+  .task-card h3{
+    font-family:var(--serif); font-size:1.28rem; margin:0 0 10px; color:var(--navy);
+  }
+  .task-card .instructions{
+    font-size:.95rem; color:var(--ink-soft); margin-bottom:14px;
+  }
+  .task-card .instructions ul, .task-card .instructions ol{ margin:8px 0 0; padding-left:22px; }
+  .task-card .instructions li{ margin-bottom:4px; }
+  .task-card code{
+    font-family:var(--mono); background:#eef1f6; padding:1px 6px; border-radius:4px; font-size:.88em; color:var(--navy-deep);
+  }
+
+  .answer-box{
+    background:var(--good-soft);
+    border:1px solid #a9d8bb;
+    border-left:4px solid var(--good);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:14px;
+  }
+  .answer-box .lbl{
+    font-family:var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    font-weight:700; color:var(--good); display:block; margin-bottom:8px;
+  }
+  .answer-box p, .answer-box li{ font-size:.92rem; color:#194b32; }
+  .answer-box ul, .answer-box ol{ margin:6px 0 0; padding-left:20px; }
+
+  .fill-box{
+    background:var(--amber-soft);
+    border:1px dashed #d9b579;
+    border-radius:8px;
+    padding:14px 16px;
+    margin-top:12px;
+  }
+  .fill-box .lbl{
+    font-family:var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    font-weight:700; color:var(--amber); display:block; margin-bottom:8px;
+  }
+  .fill-box textarea{
+    width:100%; min-height:70px; border:1px solid #e3cda0; border-radius:6px; padding:10px;
+    font-family:var(--sans); font-size:.92rem; resize:vertical; background:#fffdf8;
+  }
+
+  table{
+    width:100%; border-collapse:collapse; margin:14px 0; font-size:.88rem;
+    background:var(--panel); border-radius:8px; overflow:hidden; box-shadow:0 0 0 1px var(--line);
+  }
+  th,td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); }
+  thead th{ background:var(--navy-deep); color:#fff; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; }
+  tbody tr:nth-child(even){ background:#fbfaf7; }
+
+  .badge{ display:inline-block; font-family:var(--mono); font-weight:700; padding:2px 9px; border-radius:20px; font-size:.8em; }
+  .b-2xx{ background:var(--good-soft); color:var(--good); }
+  .b-3xx{ background:#eaf0fb; color:#2b52a3; }
+  .b-4xx{ background:var(--amber-soft); color:#8a5416; }
+  .b-5xx{ background:var(--danger-soft); color:var(--danger); }
+
+  pre{
+    background:var(--code-bg); color:var(--code-ink); padding:16px 18px; border-radius:8px;
+    overflow-x:auto; font-family:var(--mono); font-size:.84rem; line-height:1.55; margin:12px 0;
+  }
+
+  /* ===== SCREENSHOT SLOT ===== */
+  .shot-slot{
+    margin-top:16px;
+    border:2px dashed #c3c9d6;
+    border-radius:10px;
+    background:#f4f6fb;
+    padding:14px;
+  }
+  .shot-slot .shot-label{
+    font-family:var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;
+    font-weight:700; color:var(--navy); margin-bottom:10px; display:flex; align-items:center; gap:8px;
+  }
+  .shot-slot .shot-label .dot{
+    width:8px; height:8px; border-radius:50%; background:#e2792e; display:inline-block;
+  }
+  .shot-frame{
+    position:relative;
+    border-radius:8px;
+    overflow:hidden;
+    background:#e9ecf3;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .shot-frame img{
+    width:100%; display:block; max-height:480px; object-fit:contain; background:#fff;
+  }
+  .shot-missing{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; padding:30px 16px; text-align:center; color:#5b6478; font-size:.86rem;
+  }
+  .shot-missing .big{ font-size:1.6rem; }
+  .shot-missing code{
+    background:#fff; border:1px solid #d7dbe6; padding:2px 8px; border-radius:5px; font-family:var(--mono); font-size:.82em;
+  }
+  .shot-caption{
+    margin-top:8px; font-size:.82rem; color:var(--ink-soft);
+  }
+
+  .callout{
+    border-radius:8px; padding:14px 18px; margin:16px 0; font-size:.9rem; border:1px solid;
+  }
+  .callout.warn{ background:var(--amber-soft); border-color:#e6cd9f; }
+  .callout.danger{ background:var(--danger-soft); border-color:#e3b6ae; }
+  .callout .lbl{ font-weight:700; text-transform:uppercase; font-size:.7rem; letter-spacing:.08em; display:block; margin-bottom:4px; }
+  .callout.warn .lbl{ color:#8a5416; }
+  .callout.danger .lbl{ color:var(--danger); }
+
+  .done-when{
+    margin-top:14px; background:#eef1f6; border-radius:8px; padding:12px 16px; font-size:.88rem; color:var(--navy);
+  }
+  .done-when b{ color:var(--navy-deep); }
+
+  footer.page{
+    margin-top:70px; padding-top:22px; border-top:2px solid var(--line);
+    font-size:.82rem; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media print{
+    .shot-slot{ border-style:solid; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <header class="hero">
+    <div class="kicker"> Web Engineering · Week 01 · Submission </div>
+    <h1>Task Sheet — with Solutions</h1>
+    
+    <nav class="progress-bar">
+      <a href="#warmup">Warm-up</a>
+      <a href="#activity-a">Activity A</a>
+      <a href="#activity-b">Activity B</a>
+      <a href="#activity-c">Activity C</a>
+      <a href="#activity-d">Activity D</a>
+      <a href="#activity-e">Activity E</a>
+      <a href="#activity-f">Activity F</a>
+      <a href="#first-page-task">First Page</a>	  
+      <a href="#hw1">Homework 1</a>
+      <a href="#hw2">Homework 2</a>
+    </nav>
+  </header>
+
+  <!-- ===================== WARM-UP ===================== -->
+  <section class="block" id="warmup">
+    <div class="block-head"><h2>Warm-up</h2><span class="count">5 min</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Explore the Network tab on a familiar site</h3>
+      <div class="instructions">
+        Without installing anything yet, open any website you use daily in Chrome or Edge. Press <code>F12</code>. Click the <b>Network</b> tab and reload. Write down:
+        <ul>
+          <li>How many requests appeared?</li>
+          <li>Can you find one that says <code>200</code>?</li>
+        </ul>
+      </div>
+      <div class="answer-box">
+        <span class="lbl">Answer</span>
+        <p>10 requests appeared and All requests appeared with 200 status except last that is 204.</p>
+      </div>
+      <div class="shot-slot" id="shot-a-diagram">
+        <div class="shot-label"><span class="dot"></span>Screenshot of activity</div>
+        <div class="shot-frame">
+          <img src="001.png" alt="Hand-drawn client-server diagram"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY A ===================== -->
+  <section class="block" id="activity-a">
+    <div class="block-head"><h2>Class Activity A</h2><span class="count">5 min · pen &amp; paper</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Draw the client–server diagram</h3>
+      <div class="instructions">
+        <ol>
+          <li>Draw 2 boxes: left = <b>Client (Browser)</b>, right = <b>Server</b>.</li>
+          <li>Draw an arrow Client → Server labelled <b>Request</b>.</li>
+          <li>Draw an arrow Server → Client labelled <b>Response</b>.</li>
+          <li>(Optional) Draw a small box under Server labelled <b>Database</b>.</li>
+        </ol>
+        Remember: <b>Client = shows page, Server = sends data.</b>
+      </div>
+
+      <div class="shot-slot" id="shot-a-diagram">
+        <div class="shot-label"><span class="dot"></span>Answer</div>
+        <div class="shot-frame">
+          <img src="task_A.png" alt="Hand-drawn client-server diagram"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY B ===================== -->
+  <section class="block" id="activity-b">
+    <div class="block-head"><h2>Class Activity B</h2><span class="count">8 min · URL teardown</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Break a real URL into its six parts</h3>
+      <div class="instructions">
+        <ol>
+          <li>Find any URL on the internet and copy the complete address.</li>
+          <li>Split it into: Protocol, Host, Port (if any), Path, Query, Fragment.</li>
+          <li>Make sure your URL contains <b>all six parts</b> — use a Live Server URL if needed to complete the set.</li>
+          <li>Write each part separately.</li>
+          <li>Change the product or search term, and check which part of the URL changes.</li>
+        </ol>
+      </div>
+      <div class="answer-box">
+        <span class="lbl">Answer:</span>
+        <p>URL: <code>https://educareerinfo.free.nf:443/quizes/aror.php?quiz=5&cat=noncivil#ad</code></p>
+        <table>
+          <thead><tr><th>Part</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Protocol</td><td><code>https</code></td></tr>
+            <tr><td>Host</td><td><code>educareerinfo.free.nf</code></td></tr>
+            <tr><td>Port</td><td><code>443</code></td></tr>
+            <tr><td>Path</td><td><code>/quizes/aror.php</code></td></tr>
+            <tr><td>Query</td><td><code>?quiz=5&cat=noncivil</code></td></tr>
+            <tr><td>Fragment</td><td><code>#ad</code></td></tr>
+          </tbody>
+        </table>
+        <p>Changing the quiz number (e.g. <code>quiz=1</code> → <code>quiz=7</code>) and Changing the quiz catagory (e.g. <code>cat=noncivil</code> → <code>cat=civil</code>) changes only the <b>path</b>. Changing the sort option changes only the <b>query</b>. Neither changes the host or protocol.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY C ===================== -->
+  <section class="block" id="activity-c">
+    <div class="block-head"><h2>Class Activity C</h2><span class="count">5 min · HTTP Status Code Activity</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Capture one status code from each family</h3>
+      <div class="instructions">
+        Open a website and open <b>Developer Tools → Network</b>. Find one status code from each family: <span class="badge b-2xx">2xx</span> Success, <span class="badge b-3xx">3xx</span> Redirection, <span class="badge b-4xx">4xx</span> Client Error, <span class="badge b-5xx">5xx</span> Server Error. Take a screenshot of each, and write the status code and its meaning below each screenshot.
+      </div>
+      <div class="done-when"><b>Done when:</b> you have one screenshot each for 2xx, 3xx, 4xx, and 5xx.</div>
+
+      <div class="answer-box">
+        <span class="lbl">Model answer — where to find each one</span>
+        <ul>
+          <li><span class="badge b-2xx">2xx</span> Almost any successful page load — the main HTML document request is usually <code>200 OK</code>.</li>
+		  <li><span class="badge b-3xx">3xx</span> Open <code>https://http-stat.us/301</code> or <code>https://http-stat.us/302</code>, or visit a website that redirects (such as a shortened URL), and look for <code>301 Moved Permanently</code> or <code>302 Found</code>.</li>
+          <li><span class="badge b-4xx">4xx</span> Visit any non-existent page on a real site, e.g. <code>example.com/this-page-does-not-exist</code> → <code>404 Not Found</code>.</li>
+          <li><span class="badge b-5xx">5xx</span> Harder to find on demand — some public "status code testing" endpoints intentionally return one (e.g. an endpoint documented to return 500), or note it the next time a site is genuinely down.</li>
+        </ul>
+      </div>
+
+      <div class="shot-slot" id="shot-c-2xx">
+        <!-- SCREENSHOT SLOT: 2xx success status code — screenshots/activity-c-2xx.png -->
+        <div class="shot-label"><span class="dot"></span>Screenshot of Activity</div>
+        <div class="shot-frame">
+          <img src="task_C.png" alt="2xx status code screenshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY D ===================== -->
+  <section class="block" id="activity-d">
+    <div class="block-head"><h2>Class Activity D</h2><span class="count">15 min · Tools Installation &amp; Setup</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Install and verify your toolchain</h3>
+      <div class="instructions">
+        <ul>
+          <li>Install <b>Node.js, npm, and Git</b> if not already installed.</li>
+          <li>Check versions: <code>node -v</code>, <code>npm -v</code>, <code>git --version</code>.</li>
+          <li>Make sure <b>Live Server</b> is installed in your code editor and working.</li>
+          <li>Make sure <b>Prettier Formatter</b> is installed and working — test by writing messy code, saving, and confirming it auto-formats.</li>
+        </ul>
+      </div>
+      <div class="done-when"><b>Done when:</b> Node.js, npm, Git, Live Server, and Prettier are all installed and working.</div>
+      <div class="shot-slot" id="shot-d-prettier">
+        <div class="shot-label"><span class="dot"></span>Answer</div>
+        <div class="shot-frame">
+          <img src="task_D.png" alt="Prettier formatting working screenshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FIRST PAGE ===================== -->
+  <section class="block" id="first-page-task">
+    <div class="block-head"><h2>First Page</h2><span class="count">Reference build</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Build <code>hello-web/index.html</code></h3>
+      <div class="instructions">Create a folder <code>hello-web</code> with a file <code>index.html</code> containing a valid HTML5 skeleton, your name, a bio paragraph, and a button that alerts on click.</div>
+
+      <div class="answer-box">
+        <span class="lbl">Answer — complete solution code</span>
+        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Hello Web&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, Web Engineering&lt;/h1&gt;
+  &lt;p&gt;My name is &lt;strong&gt; IMRAN LATEEF UNAR &lt;/strong&gt; and this is my first page.&lt;/p&gt;
+
+  &lt;button id="greet"&gt;Click me&lt;/button&gt;
+
+  &lt;script&gt;
+    document.getElementById("greet").addEventListener("click", () =&gt; {
+      alert("The button works.");
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        <p>Open with <b>Live Server</b> so the address bar reads <code>http://127.0.0.1:5500/hello-web/index.html</code> — never <code>file://</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY E ===================== -->
+  <section class="block" id="activity-e">
+    <div class="block-head"><h2>Class Activity E</h2><span class="count">12 min · Personalise and Serve</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Make the page yours</h3>
+      <div class="instructions">
+        <ul>
+          <li>Type the skeleton yourself (do not paste).</li>
+          <li>Replace "Your Name" with your real name.</li>
+          <li>Add a short bio paragraph.</li>
+          <li>Add an unordered list of three things you want to build this semester.</li>
+          <li>Serve with Live Server and click the button.</li>
+        </ul>
+      </div>
+      <div class="done-when"><b>Done when:</b> the address bar shows <code>http://…</code> (not <code>file://</code>), your name is on the page, and the button alerts.</div>
+
+      <div class="shot-slot" id="shot-d-prettier">
+        <div class="shot-label"><span class="dot"></span>Answer</div>
+        <div class="shot-frame">
+          <img src="task_E.png" alt="Prettier formatting working screenshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY F ===================== -->
+  <section class="block" id="activity-f">
+    <div class="block-head"><h2>Class Activity F</h2><span class="count">10 min · Three DevTools Drills</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Network, Console, Elements — one drill each</h3>
+      <div class="instructions">
+        <ol>
+          <li><b>Network:</b> reload. Find <code>index.html</code>. Confirm status <code>200</code>. Screenshot it.</li>
+          <li><b>Console:</b> type <code>document.title</code> and press Enter. Check the result.</li>
+          <li><b>Elements:</b> double-click the <code>&lt;h1&gt;</code> text and change it. Reload — notice the file did <b>not</b> keep the DevTools edit.</li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Done when:</b> you have a Network 200 screenshot, a one-sentence explanation, and you can say why the Elements edit disappeared.</div>
+
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <p><b>1. Network:</b> the <code>index.html</code> row shows status <span class="badge b-2xx">200</span>, confirming the server (Live Server) sent the file successfully.</p>
+        <p><b>2. Console:</b> typing <code>document.title</code> returns <code>"Hello Web"</code> — the exact text inside your <code>&lt;title&gt;</code> tag.</p>
+        <p><b>3. Elements:</b> the heading change disappears on reload because Elements only edits the browser's live, in-memory DOM — it never writes back to the actual <code>index.html</code> file on disk.</p>
+      </div>
+
+      <div class="shot-slot" id="shot-f-network200">
+        <div class="shot-label"><span class="dot"></span>Network 200 for index.html — screenshot of activity</div>
+        <div class="shot-frame">
+          <img src="task_F.png" alt="Network tab 200 status for index.html" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LAB ===================== -->
+
+  <!-- ===================== HOMEWORK ===================== -->
+  <section class="block" id="hw1">
+    <div class="block-head"><h2>Homework — Task 1</h2><span class="count">Prove the toolchain</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Paste exact terminal output</h3>
+      <div class="instructions">Finish all installs. Paste the exact terminal output of <code>node -v</code>, <code>npm -v</code>, <code>git --version</code>.</div>
+      <div class="done-when"><b>Submit:</b> a single message or screenshot with all three outputs visible.</div>
+      <div class="shot-slot" id="shot-d-prettier">
+        <div class="shot-label"><span class="dot"></span>Answer</div>
+        <div class="shot-frame">
+          <img src="task_D.png" alt="Prettier formatting working screenshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="hw2">
+    <div class="block-head"><h2>Homework — Task 2</h2><span class="count">Network detective</span></div>
+
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Investigate a real site's Network panel</h3>
+      <div class="instructions">
+        Pick any website you use daily. Open DevTools → Network, reload, and answer in a short note:
+        <ul>
+          <li>How many requests did the page make?</li>
+          <li>What is the largest file, and what type is it (JS, image, CSS…)?</li>
+          <li>Find one request that is <b>not</b> 200. What status is it, and what do you think happened?</li>
+        </ul>
+      </div>
+      <div class="done-when"><b>Submit:</b> answers + a screenshot of the Network panel showing the non-200 row.</div>
+
+      <div class="answer-box">
+        <span class="lbl">Answer:</span>
+        <ul>
+          <li><b>Request count:</b> 102 requests shown at the bottom status bar of the Network panel.</li>
+          <li><b>Largest file:</b> The largest file is <b>load.php?lang=en&modules=site.styles&only=styles&skin=vector-2022</b>, type: <b>script (JavaScript)</b>, size: <b>208 kB</b>.</li>
+          <li><b>Non-200 request:</b> <code>Status: 404 (Not Found).</code> This request appears to be for an <code>adsbygoogle.js</code> script that does not exist or could not be found at the requested location, so the server returned <code>404 Not Found</code>. </li>
+        </ul>
+      </div>
+
+      <div class="shot-slot" id="shot-hw2-nonstatus">
+        <div class="shot-label"><span class="dot"></span>Non-200 row screenshot:</div>
+        <div class="shot-frame">
+          <img src="task_G.png" alt="Network panel showing a non-200 status row" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- ===================== SCREENSHOT GUIDE ===================== -->
+
+  <footer class="page">
+    <span>Web Engineering — Week 01 Task Sheet</span>
+    <span>Companion file: <code>week01_easynotes.html</code></span>
+  </footer>
+</main>
+</body>
+</html>
