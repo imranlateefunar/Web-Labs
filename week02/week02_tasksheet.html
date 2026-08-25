@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Week 02 — Task Sheet &amp; Submission | Web Engineering</title>
+<style>
+  :root{
+    --ink:#1a2027; --ink-soft:#4b5563; --paper:#f7f6f2; --panel:#ffffff; --line:#e4e1d8;
+    --navy:#1f3a5f; --navy-deep:#132842; --teal:#0f766e; --teal-soft:#e6f4f2;
+    --amber:#b6752b; --amber-soft:#fbeee0; --code-bg:#12203a; --code-ink:#dbe7ff;
+    --danger:#a3372b; --danger-soft:#fbe9e6; --good:#1c7a4d; --good-soft:#e6f5ec;
+    --radius:10px;
+    --serif:"Fraunces","Georgia",serif; --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono","Fira Code",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16.5px;}
+  main{max-width:960px;margin:0 auto;padding:56px 28px 120px;}
+  header.hero{margin-bottom:44px;padding-bottom:28px;border-bottom:2px solid var(--line);}
+  header.hero .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700;}
+  header.hero h1{font-family:var(--serif);font-size:2.5rem;line-height:1.08;margin:.4em 0 .3em;color:var(--navy-deep);}
+  header.hero p{color:var(--ink-soft);max-width:680px;font-size:1.02rem;}
+  .progress-bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:22px;}
+  .progress-bar a{font-family:var(--mono);font-size:.72rem;text-decoration:none;background:var(--panel);border:1px solid var(--line);color:var(--navy);padding:5px 10px;border-radius:20px;}
+  .progress-bar a:hover{background:var(--teal-soft);border-color:var(--teal);}
+  section.block{margin-bottom:24px;}
+  .block-head{display:flex;align-items:baseline;gap:12px;margin:46px 0 18px;}
+  .block-head h2{font-family:var(--serif);font-size:1.6rem;color:var(--navy-deep);margin:0;}
+  .block-head .count{font-family:var(--mono);font-size:.76rem;color:var(--ink-soft);background:var(--panel);border:1px solid var(--line);padding:3px 10px;border-radius:20px;}
+  .task-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-bottom:20px;scroll-margin-top:20px;}
+  .task-card .task-tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--amber);margin-bottom:6px;display:block;}
+  .task-card h3{font-family:var(--serif);font-size:1.24rem;margin:0 0 10px;color:var(--navy);}
+  .task-card .instructions{font-size:.95rem;color:var(--ink-soft);margin-bottom:14px;}
+  .task-card .instructions ul, .task-card .instructions ol{margin:8px 0 0;padding-left:22px;}
+  .task-card .instructions li{margin-bottom:4px;}
+  .task-card code{font-family:var(--mono);background:#eef1f6;padding:1px 6px;border-radius:4px;font-size:.88em;color:var(--navy-deep);}
+  .answer-box{background:var(--good-soft);border:1px solid #a9d8bb;border-left:4px solid var(--good);border-radius:8px;padding:16px 18px;margin-top:14px;}
+  .answer-box .lbl{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--good);display:block;margin-bottom:8px;}
+  .answer-box p, .answer-box li{font-size:.92rem;color:#194b32;}
+  .answer-box ul, .answer-box ol{margin:6px 0 0;padding-left:20px;}
+  .fill-box{background:var(--amber-soft);border:1px dashed #d9b579;border-radius:8px;padding:14px 16px;margin-top:12px;}
+  .fill-box .lbl{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--amber);display:block;margin-bottom:8px;}
+  .fill-box textarea{width:100%;min-height:70px;border:1px solid #e3cda0;border-radius:6px;padding:10px;font-family:var(--sans);font-size:.92rem;resize:vertical;background:#fffdf8;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;background:var(--panel);border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px var(--line);}
+  th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);}
+  thead th{background:var(--navy-deep);color:#fff;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;}
+  tbody tr:nth-child(even){background:#fbfaf7;}
+  pre{background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:8px;overflow-x:auto;font-family:var(--mono);font-size:.83rem;line-height:1.55;margin:12px 0;}
+  .shot-slot{margin-top:16px;border:2px dashed #c3c9d6;border-radius:10px;background:#f4f6fb;padding:14px;}
+  .shot-slot .shot-label{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .shot-slot .shot-label .dot{width:8px;height:8px;border-radius:50%;background:#e2792e;display:inline-block;}
+  .shot-frame{position:relative;min-height:160px;border-radius:8px;overflow:hidden;background:#e9ecf3;display:flex;align-items:center;justify-content:center;}
+  .shot-frame img{width:100%;display:block;max-height:480px;object-fit:contain;background:#fff;}
+  .shot-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:30px 16px;text-align:center;color:#5b6478;font-size:.86rem;}
+  .shot-missing .big{font-size:1.6rem;}
+  .shot-missing code{background:#fff;border:1px solid #d7dbe6;padding:2px 8px;border-radius:5px;font-family:var(--mono);font-size:.82em;}
+  .callout{border-radius:8px;padding:14px 18px;margin:16px 0;font-size:.9rem;border:1px solid;}
+  .callout.warn{background:var(--amber-soft);border-color:#e6cd9f;}
+  .callout.danger{background:var(--danger-soft);border-color:#e3b6ae;}
+  .callout .lbl{font-weight:700;text-transform:uppercase;font-size:.7rem;letter-spacing:.08em;display:block;margin-bottom:4px;}
+  .callout.warn .lbl{color:#8a5416;} .callout.danger .lbl{color:var(--danger);}
+  .done-when{margin-top:14px;background:#eef1f6;border-radius:8px;padding:12px 16px;font-size:.88rem;color:var(--navy);}
+  .done-when b{color:var(--navy-deep);}
+  .checklist{list-style:none;padding:0;margin:14px 0;}
+  .checklist li{padding:7px 0 7px 28px;position:relative;font-size:.92rem;border-bottom:1px dashed var(--line);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{content:"";position:absolute;left:0;top:9px;width:15px;height:15px;border:2px solid var(--navy);border-radius:4px;}
+  footer.page{margin-top:70px;padding-top:22px;border-top:2px solid var(--line);font-size:.82rem;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @media print{ .shot-slot{border-style:solid;} }
+</style>
+</head>
+<body>
+<main>
+
+  <header class="hero">
+    <div class="kicker">Web Engineering · Week 02 · Submission Package</div>
+    <h1>Task Sheet — with Solutions</h1>
+    <p>Every warm-up, class activity, lab, and homework item from Week 02 (HTML Deep Dive), each with a model answer and a clearly marked screenshot upload slot. See <a href="#screenshot-guide">the screenshot guide</a> at the bottom for exact edit instructions.</p>
+    <nav class="progress-bar">
+      <a href="#warmup">Warm-up</a>
+      <a href="#activity-a">Activity A</a>
+      <a href="#activity-b">Activity B</a>
+      <a href="#activity-c">Activity C</a>
+      <a href="#activity-d">Activity D</a>
+      <a href="#activity-e">Activity E</a>
+      <a href="#activity-f">Activity F</a>
+      <a href="#lab">Lab</a>
+      <a href="#hw1">Homework 1</a>
+      <a href="#hw2">Homework 2</a>
+      <a href="#hw3">Homework 3</a>
+      <a href="#hw4">Homework 4</a>
+      <a href="#screenshot-guide">Screenshot Guide</a>
+    </nav>
+  </header>
+
+  <!-- ===================== WARM-UP ===================== -->
+  <section class="block" id="warmup">
+    <div class="block-head"><h2>Warm-up</h2><span class="count">5 min</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Extend last week's <code>hello-web/index.html</code></h3>
+      <div class="instructions">
+        Open last week's <code>hello-web/index.html</code>. Add:
+        <ol>
+          <li>A second paragraph about yourself</li>
+          <li>An unordered list of three skills</li>
+          <li>An image with an <code>alt</code> attribute</li>
+        </ol>
+      </div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;p&gt;I enjoy learning web development and building interactive websites.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;img src="images/me.jpg" alt="A photo representing my interests" width="300" /&gt;</pre>
+      </div>
+      <div class="shot-slot" id="shot-warmup-result">
+        <div class="shot-label"><span class="dot"></span>Result — screenshots/warmup-result.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/warmup-result.png" alt="Updated hello-web page result" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/warmup-result.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY A ===================== -->
+  <section class="block" id="activity-a">
+    <div class="block-head"><h2>Class Activity A</h2><span class="count">8 min · blank file challenge</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Build the skeleton from memory</h3>
+      <div class="instructions">
+        <ol>
+          <li>Create folder <code>week-02</code> and file <code>profile.html</code></li>
+          <li>Type the skeleton from memory (doctype, html, head, body)</li>
+          <li>Open it with Live Server</li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Done when:</b> the browser tab shows your title.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;meta name="description" content="A short page summary for search engines." /&gt;
+    &lt;title&gt;My Profile&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+    &lt;p&gt;This is my first paragraph.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="shot-slot" id="shot-a-tab">
+        <div class="shot-label"><span class="dot"></span>Browser tab showing title — screenshots/activity-a-tab.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/activity-a-tab.png" alt="Browser tab showing page title" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/activity-a-tab.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY B ===================== -->
+  <section class="block" id="activity-b">
+    <div class="block-head"><h2>Class Activity B</h2><span class="count">12 min · build the bones</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Add semantic structure to <code>profile.html</code></h3>
+      <div class="instructions">
+        In <code>profile.html</code>, build:
+        <ol>
+          <li><code>&lt;header&gt;</code> with your name (<code>&lt;h1&gt;</code>) and <code>&lt;nav&gt;</code> (Home / About / Contact)</li>
+          <li><code>&lt;main&gt;</code> → <code>&lt;article&gt;</code> with a short bio</li>
+          <li><code>&lt;section&gt;</code> with 4 skills in a <code>&lt;ul&gt;</code></li>
+          <li><code>&lt;aside&gt;</code> with "Currently learning…"</li>
+          <li><code>&lt;footer&gt;</code> with copyright + <code>mailto:</code> link</li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Done when:</b> View Source shows semantic tags, not only <code>&lt;div&gt;</code>.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Imran Lateef Unar&lt;/h1&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="profile.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;article&gt;
+      &lt;h2&gt;About me&lt;/h2&gt;
+      &lt;p&gt;I am a Computer Science student learning web engineering.&lt;/p&gt;
+
+      &lt;section&gt;
+        &lt;h3&gt;Skills&lt;/h3&gt;
+        &lt;ul&gt;
+          &lt;li&gt;HTML&lt;/li&gt;
+          &lt;li&gt;CSS&lt;/li&gt;
+          &lt;li&gt;JavaScript&lt;/li&gt;
+          &lt;li&gt;Git&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/section&gt;
+    &lt;/article&gt;
+
+    &lt;aside&gt;
+      &lt;h2&gt;Currently learning&lt;/h2&gt;
+      &lt;p&gt;Semantic HTML and accessible forms.&lt;/p&gt;
+    &lt;/aside&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2026 Imran Lateef Unar · &lt;a href="mailto:imranlateefunar.bscsf24@iba-suk.edu.pk"&gt;Email me&lt;/a&gt;&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;</pre>
+      </div>
+      <div class="shot-slot" id="shot-b-viewsource">
+        <div class="shot-label"><span class="dot"></span>View Source showing semantic tags — screenshots/activity-b-viewsource.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/activity-b-viewsource.png" alt="View Source showing semantic tags" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/activity-b-viewsource.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY C ===================== -->
+  <section class="block" id="activity-c">
+    <div class="block-head"><h2>Class Activity C</h2><span class="count">10 min · media + links</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Add media and safe external links</h3>
+      <div class="instructions">
+        On your profile page:
+        <ol>
+          <li>Add one <code>&lt;figure&gt;</code> with <code>&lt;figcaption&gt;</code> and a real <code>alt</code></li>
+          <li>Add three external links in the footer (all with <code>rel="noopener noreferrer"</code>)</li>
+          <li>Add a nav link <code>href="#skills"</code> and put <code>id="skills"</code> on your skills list</li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Done when:</b> the skills link scrolls to the list.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;figure&gt;
+  &lt;img src="images/project.png" alt="Screenshot of my first HTML page" width="600" height="340" /&gt;
+  &lt;figcaption&gt;My Week 01 hello page on Live Server&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;nav&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="profile.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#skills"&gt;Skills&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;section id="skills"&gt;
+  &lt;h3&gt;Skills&lt;/h3&gt;
+  &lt;ul&gt;
+    &lt;li&gt;HTML&lt;/li&gt;
+    &lt;li&gt;CSS&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+
+&lt;footer&gt;
+  &lt;a href="https://github.com" target="_blank" rel="noopener noreferrer"&gt;GitHub&lt;/a&gt;
+  &lt;a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"&gt;LinkedIn&lt;/a&gt;
+  &lt;a href="https://developer.mozilla.org" target="_blank" rel="noopener noreferrer"&gt;MDN Docs&lt;/a&gt;
+&lt;/footer&gt;</pre>
+      </div>
+      <div class="shot-slot" id="shot-c-scroll">
+        <div class="shot-label"><span class="dot"></span>Skills link scrolling to the section — screenshots/activity-c-scroll.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/activity-c-scroll.png" alt="Skills nav link scroll result" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/activity-c-scroll.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY D ===================== -->
+  <section class="block" id="activity-d">
+    <div class="block-head"><h2>Class Activity D</h2><span class="count">15 min · contact form</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Build an accessible contact form</h3>
+      <div class="instructions">
+        Add a Contact section with a form with all the below inputs:
+        <ul>
+          <li><code>text</code>, <code>email</code>, <code>tel</code></li>
+          <li><code>select</code></li>
+          <li><code>textarea</code></li>
+          <li><code>checkbox</code></li>
+          <li>submit button</li>
+        </ul>
+        Then test:
+        <ol>
+          <li>Remove one <code>for</code>/<code>id</code> pair → label click should fail</li>
+          <li>Put it back</li>
+          <li>Submit empty → browser should block because of <code>required</code></li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Done when:</b> every label focuses its field.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;section id="contact"&gt;
+  &lt;h2&gt;Contact&lt;/h2&gt;
+  &lt;form action="#" method="post"&gt;
+    &lt;div&gt;
+      &lt;label for="name"&gt;Full name&lt;/label&gt;
+      &lt;input type="text" id="name" name="name" required /&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label for="email"&gt;Email&lt;/label&gt;
+      &lt;input type="email" id="email" name="email" required placeholder="you@example.com" /&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label for="phone"&gt;Phone&lt;/label&gt;
+      &lt;input type="tel" id="phone" name="phone" /&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label for="topic"&gt;Topic&lt;/label&gt;
+      &lt;select id="topic" name="topic"&gt;
+        &lt;option value=""&gt;Choose one&lt;/option&gt;
+        &lt;option value="help"&gt;Help&lt;/option&gt;
+        &lt;option value="feedback"&gt;Feedback&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label for="message"&gt;Message&lt;/label&gt;
+      &lt;textarea id="message" name="message" rows="4"&gt;&lt;/textarea&gt;
+    &lt;/div&gt;
+
+    &lt;label&gt;
+      &lt;input type="checkbox" name="terms" required /&gt;
+      I accept the terms
+    &lt;/label&gt;
+
+    &lt;button type="submit"&gt;Send&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/section&gt;</pre>
+        <p><b>Testing note:</b> if you temporarily change <code>for="email"</code> to <code>for="emial"</code> (typo), clicking the "Email" label text will no longer focus the field — proving the <code>for</code>/<code>id</code> match is what makes labels clickable.</p>
+      </div>
+      <div class="shot-slot" id="shot-d-form">
+        <div class="shot-label"><span class="dot"></span>Working form + required-field block — screenshots/activity-d-form.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/activity-d-form.png" alt="Contact form screenshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/activity-d-form.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY E ===================== -->
+  <section class="block" id="activity-e">
+    <div class="block-head"><h2>Class Activity E</h2><span class="count">5 min · mini data table</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Build a small data table</h3>
+      <div class="instructions">Add a small table of 3 tools/courses and your comfort level. Include <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>, and <code>scope</code>.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;table&gt;
+  &lt;caption&gt;My tools&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th scope="col"&gt;Tool&lt;/th&gt;
+      &lt;th scope="col"&gt;Comfort&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th scope="row"&gt;HTML&lt;/th&gt;
+      &lt;td&gt;Strong&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope="row"&gt;CSS&lt;/th&gt;
+      &lt;td&gt;Beginner&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope="row"&gt;Git&lt;/th&gt;
+      &lt;td&gt;Comfortable&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+      </div>
+      <div class="shot-slot" id="shot-e-table">
+        <div class="shot-label"><span class="dot"></span>Rendered table — screenshots/activity-e-table.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/activity-e-table.png" alt="Data table screenshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/activity-e-table.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACTIVITY F ===================== -->
+  <section class="block" id="activity-f">
+    <div class="block-head"><h2>Class Activity F</h2><span class="count">8 min · name your sections</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Add ids, classes, and comments</h3>
+      <div class="instructions">
+        On <code>profile.html</code>:
+        <ol>
+          <li>Give these unique <code>id</code>s: <code>skills</code>, <code>contact</code>, <code>about</code></li>
+          <li>Add a nav link to each (<code>href="#skills"</code>, etc.) and click to confirm they jump</li>
+          <li>Add <code>class="card"</code> to your <code>&lt;article&gt;</code> and <code>class="muted"</code> to one paragraph (classes do nothing visually yet — that's fine, CSS is next week)</li>
+          <li>Add three HTML comments that label: header, main content, form</li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Done when:</b> clicking each nav link scrolls to the right section, and View Source shows your comments.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer</span>
+        <pre>&lt;!-- Header section --&gt;
+&lt;header&gt;
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#skills"&gt;Skills&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;!-- Main content --&gt;
+&lt;main&gt;
+  &lt;article class="card" id="about"&gt;
+    &lt;h2&gt;About me&lt;/h2&gt;
+    &lt;p class="muted"&gt;A short subtitle line here.&lt;/p&gt;
+    &lt;p&gt;I am learning web engineering.&lt;/p&gt;
+
+    &lt;section id="skills"&gt;
+      &lt;h3&gt;Skills&lt;/h3&gt;
+      &lt;ul&gt;&lt;li&gt;HTML&lt;/li&gt;&lt;li&gt;CSS&lt;/li&gt;&lt;/ul&gt;
+    &lt;/section&gt;
+  &lt;/article&gt;
+&lt;/main&gt;
+
+&lt;!-- Form section --&gt;
+&lt;section id="contact"&gt;
+  &lt;h2&gt;Contact&lt;/h2&gt;
+  &lt;!-- form goes here --&gt;
+&lt;/section&gt;</pre>
+      </div>
+      <div class="shot-slot" id="shot-f-viewsource">
+        <div class="shot-label"><span class="dot"></span>View Source showing comments — screenshots/activity-f-viewsource.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/activity-f-viewsource.png" alt="View Source showing HTML comments" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/activity-f-viewsource.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LAB ===================== -->
+  <section class="block" id="lab">
+    <div class="block-head"><h2>Lab (In Class)</h2><span class="count">Finish and validate</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Finish <code>profile.html</code> and pass the W3C validator</h3>
+      <ul class="checklist">
+        <li>Full document skeleton (<code>&lt;!DOCTYPE&gt;</code>, <code>lang</code>, charset, viewport, description, title)</li>
+        <li>Semantic tags: <code>header</code>, <code>nav</code>, <code>main</code>, <code>article</code>, <code>section</code>, <code>aside</code>, <code>footer</code></li>
+        <li>At least one <code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code> with good <code>alt</code></li>
+        <li>Form with 5+ input types, each with <code>label</code> + <code>name</code></li>
+        <li>Useful <code>id</code>s for in-page links + at least two <code>class</code> names ready for CSS</li>
+        <li>Zero errors at <a href="https://validator.w3.org" target="_blank" rel="noopener noreferrer">validator.w3.org</a></li>
+      </ul>
+      <div class="done-when"><b>Pass criteria:</b> validator is green, and clicking a label focuses its input.<br><b>Submit:</b> <code>profile.html</code> (+ images) and a screenshot of the validator result.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer — this is simply the combination of Activities A–F</span>
+        <p>Your finished <code>profile.html</code> should contain: the full skeleton (Activity A), the semantic bones (Activity B), the figure and safe external links (Activity C), the contact form (Activity D), the data table (Activity E), and the ids/classes/comments (Activity F) — all in one file.</p>
+      </div>
+      <div class="shot-slot" id="shot-lab-validator">
+        <div class="shot-label"><span class="dot"></span>W3C validator result (green/zero errors) — screenshots/lab-validator.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/lab-validator.png" alt="W3C validator green result" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/lab-validator.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOMEWORK ===================== -->
+  <section class="block" id="hw1">
+    <div class="block-head"><h2>Homework — Task 1</h2><span class="count">Semantic teardown</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Label a real homepage's semantic regions</h3>
+      <div class="instructions">Screenshot any real homepage. Draw boxes and label: <code>header</code>, <code>nav</code>, <code>main</code>, <code>article</code>, <code>aside</code>, <code>footer</code>.</div>
+      <div class="done-when"><b>Submit:</b> annotated image.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer — how to identify each region</span>
+        <ul>
+          <li><b>header</b> — the top strip with the logo and main navigation</li>
+          <li><b>nav</b> — the menu links, often inside the header</li>
+          <li><b>main</b> — the central, page-specific content area</li>
+          <li><b>article</b> — a self-contained block within main, e.g. a news story or product card</li>
+          <li><b>aside</b> — sidebars: related links, ads, "you might also like"</li>
+          <li><b>footer</b> — the bottom strip with copyright, social links, sitemap</li>
+        </ul>
+      </div>
+      <div class="shot-slot" id="shot-hw1-annotated">
+        <div class="shot-label"><span class="dot"></span>Annotated homepage screenshot — screenshots/hw1-annotated.png</div>
+        <div class="shot-frame">
+          <img src="screenshots/hw1-annotated.png" alt="Annotated homepage with semantic regions labeled" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="shot-missing" style="display:flex;"><span class="big">📸</span>Not added yet — save as <code>screenshots/hw1-annotated.png</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="hw2">
+    <div class="block-head"><h2>Homework — Task 2</h2><span class="count">Fix bad HTML</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Rewrite div-soup as semantic HTML</h3>
+      <div class="instructions">Rewrite this in <code>homework-rewrite.html</code> using semantic tags:</div>
+      <pre>&lt;div class="top"&gt;
+  &lt;div class="big-text"&gt;My Blog&lt;/div&gt;
+  &lt;div class="links"&gt;&lt;span onclick="go('/')"&gt;Home&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="post"&gt;
+  &lt;div class="post-title"&gt;First Post&lt;/div&gt;
+  &lt;div class="post-body"&gt;Hello world&lt;/div&gt;
+  &lt;div class="date"&gt;Aug 9 2026&lt;/div&gt;
+&lt;/div&gt;</pre>
+      <div class="done-when"><b>Submit:</b> file that passes the W3C validator.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer — semantic rewrite</span>
+        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;My Blog&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;My Blog&lt;/h1&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;article&gt;
+      &lt;h2&gt;First Post&lt;/h2&gt;
+      &lt;p&gt;Hello world&lt;/p&gt;
+      &lt;p&gt;&lt;time datetime="2026-08-09"&gt;Aug 9 2026&lt;/time&gt;&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        <p><b>What changed and why:</b> the <code>&lt;span onclick="go('/')"&gt;</code> becomes a real <code>&lt;a href="/"&gt;</code> — links should be actual <code>&lt;a&gt;</code> tags, not clickable <code>&lt;span&gt;</code>s, so they work with keyboards and screen readers. Each generic <code>&lt;div&gt;</code> becomes the tag matching its real meaning: title→<code>&lt;h1&gt;</code>/<code>&lt;h2&gt;</code>, the post itself→<code>&lt;article&gt;</code>, the date→<code>&lt;time&gt;</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="hw3">
+    <div class="block-head"><h2>Homework — Task 3</h2><span class="count">Second page</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Build a linked contact page</h3>
+      <div class="instructions">
+        <ol>
+          <li>Create <code>contact.html</code> with a form</li>
+          <li>Link <code>profile.html</code> ↔ <code>contact.html</code> in both navs</li>
+          <li>Same copyright line in both footers</li>
+        </ol>
+      </div>
+      <div class="done-when"><b>Submit:</b> both HTML files.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer — <code>contact.html</code> skeleton</span>
+        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Contact — My Profile&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="profile.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;h1&gt;Contact&lt;/h1&gt;
+    &lt;form action="#" method="post"&gt;
+      &lt;label for="name"&gt;Full name&lt;/label&gt;
+      &lt;input type="text" id="name" name="name" required /&gt;
+
+      &lt;label for="email"&gt;Email&lt;/label&gt;
+      &lt;input type="email" id="email" name="email" required /&gt;
+
+      &lt;label for="message"&gt;Message&lt;/label&gt;
+      &lt;textarea id="message" name="message" rows="4"&gt;&lt;/textarea&gt;
+
+      &lt;button type="submit"&gt;Send&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2026 My Site&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        <p>Make sure <code>profile.html</code>'s <code>&lt;footer&gt;</code> uses the exact same copyright text as this one, and both navs link to each other.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="hw4">
+    <div class="block-head"><h2>Homework — Task 4</h2><span class="count">Reflect · max 5 sentences</span></div>
+    <div class="task-card">
+      <span class="task-tag">Task</span>
+      <h3>Where did you almost use a <code>&lt;div&gt;</code>?</h3>
+      <div class="instructions">In up to 5 sentences: describe one spot where you almost reached for a plain <code>&lt;div&gt;</code>, and what semantic tag you used instead.</div>
+      <div class="answer-box">
+        <span class="lbl">Model answer (example — write your own)</span>
+        <p>I almost wrapped my "Currently learning" note in a plain <code>&lt;div&gt;</code>, but since it's related-but-secondary content next to my main bio, I used <code>&lt;aside&gt;</code> instead. That was a better fit because <code>&lt;aside&gt;</code> tells the browser and screen readers this content is supplementary, not part of the main flow of the article, which a generic <code>&lt;div&gt;</code> could never communicate.</p>
+      </div>
+      <div class="fill-box">
+        <span class="lbl">Your reflection</span>
+        <textarea placeholder="Where I almost used a div, and what I used instead..."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCREENSHOT GUIDE ===================== -->
+  <section class="block" id="screenshot-guide">
+    <div class="block-head"><h2>How to Add Your Screenshots</h2><span class="count">Read this before uploading</span></div>
+    <div class="task-card">
+      <div class="callout warn">
+        <span class="lbl">Where each screenshot slot points</span>
+        Every dashed box above is an empty <code>&lt;img&gt;</code> tag pointing at a file inside a <code>screenshots/</code> folder that sits <b>next to</b> this HTML file. Until that file exists, the box shows a friendly "not added yet" placeholder instead of a broken image icon.
+      </div>
+      <div class="callout danger">
+        <span class="lbl">Exact steps</span>
+        <ol>
+          <li>In the same folder as <code>week02_tasksheet.html</code>, create a folder named exactly <code>screenshots</code>.</li>
+          <li>Save each screenshot into that folder using the <b>exact filename</b> printed above each box (e.g. <code>activity-d-form.png</code>).</li>
+          <li>Open <code>week02_tasksheet.html</code> in your editor and use Find (<code>Ctrl+F</code>) to search that filename to jump straight to its <code>&lt;img src="screenshots/...">&lt;/img&gt;</code> line.</li>
+          <li>If your filename matches exactly, you don't need to edit anything — just reload the page in your browser to confirm the image appears.</li>
+          <li>If you prefer your own filenames, edit that <code>&lt;img&gt;</code> tag's <code>src="screenshots/…"</code> attribute to match.</li>
+        </ol>
+      </div>
+      <p style="color:var(--ink-soft); font-size:.88rem;">Tip: keep every screenshot inside the <code>screenshots/</code> folder so the whole submission (this HTML file + folder) can be zipped and uploaded to the e-learning portal as one piece.</p>
+    </div>
+  </section>
+
+  <footer class="page">
+    <span>Web Engineering — Week 02 Task Sheet</span>
+    <span>Companion file: <code>week02_easynotes.html</code></span>
+  </footer>
+</main>
+</body>
+</html>

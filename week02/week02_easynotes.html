@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Week 02 — HTML Deep Dive | Easy Notes</title>
+<style>
+  :root{
+    --ink:#1a2027; --ink-soft:#4b5563; --paper:#f7f6f2; --panel:#ffffff; --line:#e4e1d8;
+    --navy:#1f3a5f; --navy-deep:#132842; --teal:#0f766e; --teal-soft:#e6f4f2;
+    --amber:#b6752b; --amber-soft:#fbeee0; --code-bg:#12203a; --code-ink:#dbe7ff;
+    --danger:#a3372b; --danger-soft:#fbe9e6; --good:#1c7a4d; --good-soft:#e6f5ec;
+    --radius:10px;
+    --serif:"Fraunces","Georgia",serif; --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono","Fira Code",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.65;font-size:16.5px;}
+  .shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  nav.toc{background:var(--navy-deep);color:#cfe0f5;padding:28px 22px 60px;position:sticky;top:0;height:100vh;overflow-y:auto;}
+  nav.toc .brand{font-family:var(--serif);font-size:1.4rem;color:#fff;margin-bottom:4px;font-weight:600;}
+  nav.toc .brand small{display:block;font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#7f9cc4;margin-top:6px;font-weight:600;}
+  nav.toc ol{list-style:none;margin:28px 0 0;padding:0;counter-reset:toc;}
+  nav.toc li{counter-increment:toc;margin-bottom:2px;}
+  nav.toc a{display:flex;gap:10px;align-items:baseline;color:#a9c1de;text-decoration:none;font-size:.84rem;padding:8px 10px;border-radius:8px;transition:background .15s,color .15s;}
+  nav.toc a::before{content:counter(toc,decimal-leading-zero);font-family:var(--mono);font-size:.7rem;color:#5b7ba3;flex-shrink:0;}
+  nav.toc a:hover{background:rgba(255,255,255,.06);color:#fff;}
+  main{padding:56px 64px 120px;max-width:920px;}
+  header.hero{margin-bottom:56px;padding-bottom:32px;border-bottom:2px solid var(--line);}
+  header.hero .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700;}
+  header.hero h1{font-family:var(--serif);font-size:2.9rem;line-height:1.05;margin:.4em 0 .3em;color:var(--navy-deep);}
+  header.hero p.lede{font-size:1.08rem;color:var(--ink-soft);max-width:660px;}
+  .goal-box{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:var(--radius);padding:16px 20px;font-size:.96rem;}
+  .goal-box b{color:var(--navy-deep);}
+  .recap-box{margin-top:16px;background:var(--teal-soft);border:1px solid #c9e6e2;border-radius:var(--radius);padding:16px 20px;font-size:.9rem;}
+  .recap-box b{color:var(--navy-deep);display:block;margin-bottom:8px;}
+  .recap-box ul{margin:0;padding-left:20px;columns:2;column-gap:24px;}
+  .recap-box li{font-size:.86rem;margin-bottom:4px;break-inside:avoid;}
+  section.topic{margin-bottom:60px;scroll-margin-top:24px;}
+  section.topic .eyebrow{font-family:var(--mono);font-size:.74rem;color:var(--amber);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:6px;}
+  section.topic h2{font-family:var(--serif);font-size:1.9rem;color:var(--navy-deep);margin:0 0 18px;border-bottom:2px solid var(--line);padding-bottom:14px;}
+  h3.sub{font-family:var(--serif);font-size:1.2rem;color:var(--navy);margin:30px 0 10px;}
+  p{color:var(--ink);}
+  p.small-note{font-size:.88rem;color:var(--ink-soft);}
+  .dual{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0 26px;}
+  @media (max-width:760px){.dual{grid-template-columns:1fr;}}
+  .dual .card{border-radius:var(--radius);padding:18px 20px;border:1px solid var(--line);}
+  .dual .layman{background:var(--amber-soft);border-color:#eddcc0;}
+  .dual .tech{background:var(--teal-soft);border-color:#c9e6e2;}
+  .dual .card .tag{display:inline-block;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
+  .dual .layman .tag{background:#e9c68c;color:#5c3b0e;}
+  .dual .tech .tag{background:#8fd0c5;color:#0b3a34;}
+  .dual .card p{margin:0;font-size:.94rem;}
+  .term{background:#eef1f6;border:1px solid #d7dee8;border-radius:6px;padding:1px 7px;font-family:var(--mono);font-size:.86em;color:var(--navy-deep);white-space:nowrap;}
+  .def-grid{display:grid;grid-template-columns:190px 1fr;gap:10px 18px;margin:18px 0 8px;}
+  .def-grid dt{font-family:var(--mono);font-weight:700;color:var(--navy);font-size:.88rem;padding-top:2px;}
+  .def-grid dd{margin:0;font-size:.93rem;color:var(--ink-soft);border-bottom:1px dashed var(--line);padding-bottom:10px;}
+  table{width:100%;border-collapse:collapse;margin:16px 0 28px;font-size:.9rem;background:var(--panel);border-radius:var(--radius);overflow:hidden;box-shadow:0 0 0 1px var(--line);}
+  th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--line);vertical-align:top;}
+  thead th{background:var(--navy-deep);color:#fff;font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#fbfaf7;}
+  td code, li code, p code, dd code{font-family:var(--mono);background:#eef1f6;padding:1px 6px;border-radius:4px;font-size:.88em;color:var(--navy-deep);}
+  pre{background:var(--code-bg);color:var(--code-ink);padding:18px 20px;border-radius:var(--radius);overflow-x:auto;font-family:var(--mono);font-size:.84rem;line-height:1.6;margin:16px 0 24px;}
+  pre .tagname{color:#7ec1ff;} pre .attr{color:#ffb673;} pre .val{color:#a7e7a0;} pre .cmt{color:#7f8fae;font-style:italic;}
+  .callout{border-radius:var(--radius);padding:15px 20px;margin:18px 0;font-size:.93rem;border:1px solid;}
+  .callout.warn{background:var(--amber-soft);border-color:#e6cd9f;}
+  .callout.danger{background:var(--danger-soft);border-color:#e3b6ae;}
+  .callout.good{background:var(--good-soft);border-color:#a9d8bb;}
+  .callout .lbl{font-weight:700;text-transform:uppercase;font-size:.7rem;letter-spacing:.08em;display:block;margin-bottom:5px;}
+  .callout.warn .lbl{color:#8a5416;} .callout.danger .lbl{color:var(--danger);} .callout.good .lbl{color:var(--good);}
+  .tag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:18px 0 26px;}
+  .tag-chip{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+  .tag-chip code{display:block;font-family:var(--mono);font-weight:700;color:var(--navy-deep);margin-bottom:3px;font-size:.86rem;}
+  .tag-chip span{font-size:.78rem;color:var(--ink-soft);}
+  .input-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:16px 0 26px;}
+  .input-chip{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+  .input-chip code{font-family:var(--mono);color:var(--teal);font-weight:700;font-size:.84rem;}
+  .input-chip p{margin:4px 0 0;font-size:.8rem;color:var(--ink-soft);}
+  ul.check{list-style:none;padding:0;margin:16px 0;}
+  ul.check li{padding:8px 0 8px 30px;position:relative;font-size:.94rem;border-bottom:1px dashed var(--line);}
+  ul.check li:last-child{border-bottom:none;}
+  ul.check li::before{content:"✓";position:absolute;left:0;top:8px;color:var(--teal);font-weight:700;background:var(--teal-soft);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;}
+  .glossary-list{display:grid;gap:2px;}
+  .glossary-item{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start;}
+  @media (max-width:700px){.glossary-item{grid-template-columns:1fr;}}
+  .glossary-item dt{font-family:var(--mono);font-weight:700;color:var(--navy-deep);font-size:.95rem;}
+  .glossary-item dd{margin:0;color:var(--ink-soft);font-size:.93rem;}
+  footer.page{margin-top:80px;padding-top:26px;border-top:2px solid var(--line);font-size:.82rem;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @media (max-width:900px){.shell{grid-template-columns:1fr;} nav.toc{position:relative;height:auto;} main{padding:36px 22px 100px;} header.hero h1{font-size:2.1rem;}}
+  @media print{nav.toc{display:none;} .shell{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc">
+    <div class="brand">HTML Deep Dive<small>Week 02 · Easy Notes</small></div>
+    <ol>
+      <li><a href="#recap">Week 01 Recap</a></li>
+      <li><a href="#skeleton">HTML Document Skeleton</a></li>
+      <li><a href="#elements">HTML Elements &amp; Attributes</a></li>
+      <li><a href="#headings-text">Headings &amp; Text</a></li>
+      <li><a href="#lists">Lists</a></li>
+      <li><a href="#links">Links</a></li>
+      <li><a href="#images">Images</a></li>
+      <li><a href="#semantic">Semantic Elements</a></li>
+      <li><a href="#forms">Forms</a></li>
+      <li><a href="#tables">Tables</a></li>
+      <li><a href="#id-class">id, class &amp; Comments</a></li>
+      <li><a href="#mistakes">Common Mistakes</a></li>
+      <li><a href="#glossary">Full Glossary</a></li>
+      <li><a href="#checklist">Self-Check Before Week 03</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="kicker">Web Engineering · Class Notes · Week 02</div>
+      <h1>HTML Deep Dive</h1>
+      <p class="lede">Last week you learned <em>how the web talks</em>. This week you learn <em>how to describe a page's structure</em> so browsers, search engines, and screen readers all understand it correctly — building a full semantic profile page with a working form.</p>
+      <div class="goal-box">
+        <b>By the end of this topic you should be able to:</b> write a valid HTML skeleton from memory, use semantic tags instead of only <code>&lt;div&gt;</code>, build an accessible form with 5+ input types, build a data table correctly, and use <code>id</code>/<code>class</code> to name and target elements.
+      </div>
+      <div class="recap-box">
+        <b>Quick recap — what Week 01 covered</b>
+        <ul>
+          <li>Client vs. server</li>
+          <li>Browser–server communication</li>
+          <li>HTTP requests &amp; responses</li>
+          <li>URL anatomy</li>
+          <li>HTTP methods</li>
+          <li>HTTP status codes</li>
+          <li>HTML, CSS, JS roles</li>
+          <li>Dev environment setup</li>
+          <li>Node.js, npm, Git basics</li>
+          <li>Live Server + Prettier</li>
+          <li>Serving an HTML page</li>
+          <li>DevTools: Elements, Console, Network</li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- ================= SKELETON ================= -->
+    <section class="topic" id="skeleton">
+      <div class="eyebrow">Concept 01</div>
+      <h2>The HTML Document Skeleton</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Every house you build starts with the same foundation and frame, no matter what the house looks like later. HTML pages are the same — every single one starts with the exact same skeleton before you add any real content.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>Every valid HTML5 document needs a <code>&lt;!DOCTYPE html&gt;</code> declaration, a root <code>&lt;html&gt;</code> element, a <code>&lt;head&gt;</code> for metadata, and a <code>&lt;body&gt;</code> for visible content.</p>
+        </div>
+      </div>
+
+      <pre>&lt;<span class="tagname">!DOCTYPE html</span>&gt;
+&lt;<span class="tagname">html</span> <span class="attr">lang</span>=<span class="val">"en"</span>&gt;
+  &lt;<span class="tagname">head</span>&gt;
+    &lt;<span class="tagname">meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span>/&gt;
+    &lt;<span class="tagname">meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span>/&gt;
+    &lt;<span class="tagname">meta</span> <span class="attr">name</span>=<span class="val">"description"</span> <span class="attr">content</span>=<span class="val">"A short page summary for search engines."</span>/&gt;
+    &lt;<span class="tagname">title</span>&gt;My Profile&lt;/<span class="tagname">title</span>&gt;
+  &lt;/<span class="tagname">head</span>&gt;
+  &lt;<span class="tagname">body</span>&gt;
+    &lt;<span class="tagname">h1</span>&gt;Hello&lt;/<span class="tagname">h1</span>&gt;
+    &lt;<span class="tagname">p</span>&gt;This is my first paragraph.&lt;/<span class="tagname">p</span>&gt;
+  &lt;/<span class="tagname">body</span>&gt;
+&lt;/<span class="tagname">html</span>&gt;</pre>
+
+      <div class="def-grid">
+        <dt>&lt;!DOCTYPE html&gt;</dt><dd>Declares the document as HTML5.</dd>
+        <dt>&lt;html&gt;</dt><dd>The root element of the page.</dd>
+        <dt>&lt;head&gt;</dt><dd>Information about the page — not shown on screen.</dd>
+        <dt>&lt;title&gt;</dt><dd>Text shown in the browser tab.</dd>
+        <dt>&lt;body&gt;</dt><dd>All visible content.</dd>
+        <dt>&lt;h1&gt;</dt><dd>A large top-level heading.</dd>
+        <dt>&lt;p&gt;</dt><dd>A paragraph.</dd>
+      </div>
+
+      <div class="callout danger">
+        <span class="lbl">Don't forget these two</span>
+        Forgetting <code>charset="UTF-8"</code> can make special characters look broken. Forgetting <code>viewport</code> makes the page look tiny and unusable on phones.
+      </div>
+    </section>
+
+    <!-- ================= ELEMENTS ================= -->
+    <section class="topic" id="elements">
+      <div class="eyebrow">Concept 02</div>
+      <h2>HTML Elements &amp; Attributes</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>An element is like a labelled box: a start tag is the "open" flap, the content is what's inside, and the end tag is the "close" flap. An attribute is like a sticky note on the outside of the box giving extra instructions — "fragile", "this side up".</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>An element is <code>&lt;tagname&gt;content&lt;/tagname&gt;</code>. Attributes are key="value" pairs inside the start tag that give the browser extra information about that element.</p>
+        </div>
+      </div>
+
+      <pre>&lt;<span class="tagname">h1</span>&gt;My First Heading&lt;/<span class="tagname">h1</span>&gt;
+&lt;<span class="tagname">p</span>&gt;My first paragraph.&lt;/<span class="tagname">p</span>&gt;
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"https://example.com"</span> <span class="attr">target</span>=<span class="val">"_blank"</span>&gt;Visit site&lt;/<span class="tagname">a</span>&gt;</pre>
+
+      <table>
+        <thead><tr><th>Start tag</th><th>Content</th><th>End tag</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;h1&gt;</code></td><td>My First Heading</td><td><code>&lt;/h1&gt;</code></td></tr>
+          <tr><td><code>&lt;p&gt;</code></td><td>My first paragraph.</td><td><code>&lt;/p&gt;</code></td></tr>
+          <tr><td><code>&lt;a&gt;</code></td><td>Visit site</td><td><code>&lt;/a&gt;</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <span class="lbl">Empty (void) elements</span>
+        Some elements have no content and no end tag: <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;link&gt;</code>. They're self-contained — nothing goes "inside" them.
+      </div>
+      <p><b>Attributes in action:</b> <code>href</code> tells a link where to go; <code>target="_blank"</code> tells it to open in a new tab.</p>
+    </section>
+
+    <!-- ================= HEADINGS & TEXT ================= -->
+    <section class="topic" id="headings-text">
+      <div class="eyebrow">Concept 03</div>
+      <h2>Headings &amp; Text</h2>
+
+      <h3 class="sub">Headings</h3>
+      <pre>&lt;<span class="tagname">h1</span>&gt;This is heading 1&lt;/<span class="tagname">h1</span>&gt;
+&lt;<span class="tagname">h2</span>&gt;This is heading 2&lt;/<span class="tagname">h2</span>&gt;
+&lt;<span class="tagname">h3</span>&gt;This is heading 3&lt;/<span class="tagname">h3</span>&gt;</pre>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Headings are like the outline of a book: Chapter title (<code>h1</code>), section title (<code>h2</code>), sub-section title (<code>h3</code>). You'd never jump from a chapter title straight to a sub-sub-section — the outline would stop making sense.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p><code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> define a hierarchy of importance. Use exactly one <code>&lt;h1&gt;</code> per page (the page title), and never skip a level (no jumping <code>h1</code> → <code>h3</code>).</p>
+        </div>
+      </div>
+
+      <h3 class="sub">Paragraphs &amp; inline emphasis</h3>
+      <pre>&lt;<span class="tagname">p</span>&gt;
+  &lt;<span class="tagname">strong</span>&gt;Important text&lt;/<span class="tagname">strong</span>&gt; and
+  &lt;<span class="tagname">em</span>&gt;emphasized text&lt;/<span class="tagname">em</span>&gt;.
+&lt;/<span class="tagname">p</span>&gt;</pre>
+      <table>
+        <thead><tr><th>Tag</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;p&gt;</code></td><td>A paragraph</td></tr>
+          <tr><td><code>&lt;strong&gt;</code></td><td>Important text — usually renders bold</td></tr>
+          <tr><td><code>&lt;em&gt;</code></td><td>Emphasized text — usually renders italic</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= LISTS ================= -->
+    <section class="topic" id="lists">
+      <div class="eyebrow">Concept 04</div>
+      <h2>Lists</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>A grocery list where order doesn't matter (milk, eggs, bread) is an <b>unordered list</b>. A recipe's numbered steps, where order matters, is an <b>ordered list</b>. A dictionary — word, then its meaning — is a <b>description list</b>.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p><code>&lt;ul&gt;</code> = bullet list, <code>&lt;ol&gt;</code> = numbered list, both containing <code>&lt;li&gt;</code> items. <code>&lt;dl&gt;</code> pairs <code>&lt;dt&gt;</code> (term) with <code>&lt;dd&gt;</code> (definition).</p>
+        </div>
+      </div>
+
+      <pre>&lt;<span class="tagname">ul</span>&gt;
+  &lt;<span class="tagname">li</span>&gt;Coffee&lt;/<span class="tagname">li</span>&gt;
+  &lt;<span class="tagname">li</span>&gt;Tea&lt;/<span class="tagname">li</span>&gt;
+  &lt;<span class="tagname">li</span>&gt;Milk&lt;/<span class="tagname">li</span>&gt;
+&lt;/<span class="tagname">ul</span>&gt;
+
+&lt;<span class="tagname">ol</span>&gt;
+  &lt;<span class="tagname">li</span>&gt;Open the editor&lt;/<span class="tagname">li</span>&gt;
+  &lt;<span class="tagname">li</span>&gt;Create a file&lt;/<span class="tagname">li</span>&gt;
+  &lt;<span class="tagname">li</span>&gt;Save the file&lt;/<span class="tagname">li</span>&gt;
+&lt;/<span class="tagname">ol</span>&gt;
+
+&lt;<span class="tagname">dl</span>&gt;
+  &lt;<span class="tagname">dt</span>&gt;HTML&lt;/<span class="tagname">dt</span>&gt;
+  &lt;<span class="tagname">dd</span>&gt;HyperText Markup Language&lt;/<span class="tagname">dd</span>&gt;
+  &lt;<span class="tagname">dt</span>&gt;CSS&lt;/<span class="tagname">dt</span>&gt;
+  &lt;<span class="tagname">dd</span>&gt;Cascading Style Sheets&lt;/<span class="tagname">dd</span>&gt;
+&lt;/<span class="tagname">dl</span>&gt;</pre>
+
+      <table>
+        <thead><tr><th>Tag</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;ul&gt;</code></td><td>Bullet list — order does not matter</td></tr>
+          <tr><td><code>&lt;ol&gt;</code></td><td>Numbered list — order matters</td></tr>
+          <tr><td><code>&lt;li&gt;</code></td><td>One list item</td></tr>
+          <tr><td><code>&lt;dl&gt;</code> / <code>&lt;dt&gt;</code> / <code>&lt;dd&gt;</code></td><td>Term and its definition</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= LINKS ================= -->
+    <section class="topic" id="links">
+      <div class="eyebrow">Concept 05</div>
+      <h2>Links</h2>
+      <p>HTML links are defined with the <code>&lt;a&gt;</code> tag. The <code>href</code> attribute is the destination.</p>
+
+      <pre>&lt;<span class="cmt">!-- Link to another page --</span>&gt;
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"about.html"</span>&gt;About us&lt;/<span class="tagname">a</span>&gt;
+
+&lt;<span class="cmt">!-- Link to another website --</span>&gt;
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"https://www.w3schools.com"</span> <span class="attr">target</span>=<span class="val">"_blank"</span> <span class="attr">rel</span>=<span class="val">"noopener noreferrer"</span>&gt;
+  Visit W3Schools
+&lt;/<span class="tagname">a</span>&gt;
+
+&lt;<span class="cmt">!-- Jump to a section on the same page --</span>&gt;
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"#contact"</span>&gt;Contact&lt;/<span class="tagname">a</span>&gt;
+
+&lt;<span class="cmt">!-- Email and phone --</span>&gt;
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"mailto:me@example.com"</span>&gt;Email me&lt;/<span class="tagname">a</span>&gt;
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"tel:+923001234567"</span>&gt;Call me&lt;/<span class="tagname">a</span>&gt;</pre>
+
+      <table>
+        <thead><tr><th>Attribute / pattern</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>href="page.html"</code></td><td>Link to another file</td></tr>
+          <tr><td><code>href="https://..."</code></td><td>Link to an external site</td></tr>
+          <tr><td><code>href="#id"</code></td><td>Jump to an element with that <code>id</code></td></tr>
+          <tr><td><code>target="_blank"</code></td><td>Open in a new tab</td></tr>
+          <tr><td><code>rel="noopener noreferrer"</code></td><td>Safer new-tab links — always pair with <code>target="_blank"</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Opening a link in a new tab without <code>rel="noopener"</code> is like handing a stranger a copy of your house key along with the address — the new page could, in rare cases, reach back and mess with your original tab. <code>noopener</code> takes the key back.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p><code>noopener</code> stops the newly opened page from getting a JS reference back to your original tab (security). <code>noreferrer</code> also hides your site's URL from the destination's analytics (privacy). Neither affects SEO — search engines crawl and pass link authority through these normally.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= IMAGES ================= -->
+    <section class="topic" id="images">
+      <div class="eyebrow">Concept 06</div>
+      <h2>Images</h2>
+      <p>HTML images use the <code>&lt;img&gt;</code> tag — an empty element with no end tag.</p>
+
+      <pre>&lt;<span class="tagname">img</span>
+  <span class="attr">src</span>=<span class="val">"images/me.jpg"</span>
+  <span class="attr">alt</span>=<span class="val">"A student smiling in front of a laptop"</span>
+  <span class="attr">width</span>=<span class="val">"400"</span>
+  <span class="attr">height</span>=<span class="val">"400"</span>
+/&gt;</pre>
+
+      <table>
+        <thead><tr><th>Attribute</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>src</code></td><td>Path or URL of the image</td></tr>
+          <tr><td><code>alt</code></td><td>Text shown if the image fails to load, and read aloud by screen readers — <b>required</b></td></tr>
+          <tr><td><code>width</code> / <code>height</code></td><td>Size in pixels — helps stop the page "jumping" while the image loads</td></tr>
+          <tr><td><code>loading="lazy"</code></td><td>Only loads the image once it's near the visible screen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout good">
+        <span class="lbl">Writing good alt text</span>
+        Describe what the image actually shows, e.g. <code>alt="A student smiling in front of a laptop"</code>. If the image is pure decoration with no meaning, use an empty <code>alt=""</code> so screen readers skip it.
+      </div>
+
+      <h3 class="sub">Image with a caption</h3>
+      <pre>&lt;<span class="tagname">figure</span>&gt;
+  &lt;<span class="tagname">img</span>
+    <span class="attr">src</span>=<span class="val">"images/project.png"</span>
+    <span class="attr">alt</span>=<span class="val">"Screenshot of a to-do app on a laptop"</span>
+    <span class="attr">width</span>=<span class="val">"800"</span>
+    <span class="attr">height</span>=<span class="val">"450"</span>
+  /&gt;
+  &lt;<span class="tagname">figcaption</span>&gt;My Week 01 hello page on Live Server&lt;/<span class="tagname">figcaption</span>&gt;
+&lt;/<span class="tagname">figure</span>&gt;</pre>
+      <p class="small-note"><code>&lt;figure&gt;</code> groups an image with its caption; <code>&lt;figcaption&gt;</code> is the caption text itself.</p>
+    </section>
+
+    <!-- ================= SEMANTIC ================= -->
+    <section class="topic" id="semantic">
+      <div class="eyebrow">Concept 07</div>
+      <h2>Semantic Elements</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>Imagine labelling every box in your house "box" — you'd have no idea which one has kitchen stuff and which has clothes. Semantic tags are like writing the real label on each box: "Kitchen", "Living Room", "Bedroom" — anyone (including a screen reader) instantly knows what's inside.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>Semantic elements describe their <em>meaning</em>, not just their appearance, unlike a generic <code>&lt;div&gt;</code>. Browsers, search engines, and assistive technology all use this meaning.</p>
+        </div>
+      </div>
+
+      <h3 class="sub">Bad — no meaning</h3>
+      <pre>&lt;<span class="tagname">div</span> <span class="attr">class</span>=<span class="val">"header"</span>&gt;...&lt;/<span class="tagname">div</span>&gt;
+&lt;<span class="tagname">div</span> <span class="attr">class</span>=<span class="val">"nav"</span>&gt;...&lt;/<span class="tagname">div</span>&gt;
+&lt;<span class="tagname">div</span> <span class="attr">class</span>=<span class="val">"content"</span>&gt;...&lt;/<span class="tagname">div</span>&gt;
+&lt;<span class="tagname">div</span> <span class="attr">class</span>=<span class="val">"footer"</span>&gt;...&lt;/<span class="tagname">div</span>&gt;</pre>
+
+      <h3 class="sub">Good — semantic</h3>
+      <pre>&lt;<span class="tagname">body</span>&gt;
+  &lt;<span class="tagname">header</span>&gt;
+    &lt;<span class="tagname">h1</span>&gt;My Site&lt;/<span class="tagname">h1</span>&gt;
+    &lt;<span class="tagname">nav</span>&gt;
+      &lt;<span class="tagname">ul</span>&gt;
+        &lt;<span class="tagname">li</span>&gt;&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"profile.html"</span>&gt;Home&lt;/<span class="tagname">a</span>&gt;&lt;/<span class="tagname">li</span>&gt;
+        &lt;<span class="tagname">li</span>&gt;&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"contact.html"</span>&gt;Contact&lt;/<span class="tagname">a</span>&gt;&lt;/<span class="tagname">li</span>&gt;
+      &lt;/<span class="tagname">ul</span>&gt;
+    &lt;/<span class="tagname">nav</span>&gt;
+  &lt;/<span class="tagname">header</span>&gt;
+
+  &lt;<span class="tagname">main</span>&gt;
+    &lt;<span class="tagname">article</span>&gt;
+      &lt;<span class="tagname">h2</span>&gt;About me&lt;/<span class="tagname">h2</span>&gt;
+      &lt;<span class="tagname">p</span>&gt;I am learning web engineering.&lt;/<span class="tagname">p</span>&gt;
+      &lt;<span class="tagname">section</span> <span class="attr">id</span>=<span class="val">"skills"</span>&gt;
+        &lt;<span class="tagname">h3</span>&gt;Skills&lt;/<span class="tagname">h3</span>&gt;
+        &lt;<span class="tagname">ul</span>&gt;
+          &lt;<span class="tagname">li</span>&gt;HTML&lt;/<span class="tagname">li</span>&gt;
+          &lt;<span class="tagname">li</span>&gt;CSS&lt;/<span class="tagname">li</span>&gt;
+        &lt;/<span class="tagname">ul</span>&gt;
+      &lt;/<span class="tagname">section</span>&gt;
+    &lt;/<span class="tagname">article</span>&gt;
+
+    &lt;<span class="tagname">aside</span>&gt;
+      &lt;<span class="tagname">h2</span>&gt;Currently learning&lt;/<span class="tagname">h2</span>&gt;
+      &lt;<span class="tagname">p</span>&gt;JavaScript&lt;/<span class="tagname">p</span>&gt;
+    &lt;/<span class="tagname">aside</span>&gt;
+  &lt;/<span class="tagname">main</span>&gt;
+
+  &lt;<span class="tagname">footer</span>&gt;
+    &lt;<span class="tagname">p</span>&gt;&amp;copy; 2026 My Site&lt;/<span class="tagname">p</span>&gt;
+  &lt;/<span class="tagname">footer</span>&gt;
+&lt;/<span class="tagname">body</span>&gt;</pre>
+
+      <div class="tag-grid">
+        <div class="tag-chip"><code>&lt;header&gt;</code><span>Introductory content</span></div>
+        <div class="tag-chip"><code>&lt;nav&gt;</code><span>Navigation links</span></div>
+        <div class="tag-chip"><code>&lt;main&gt;</code><span>Main content — one per page</span></div>
+        <div class="tag-chip"><code>&lt;article&gt;</code><span>Content that makes sense alone</span></div>
+        <div class="tag-chip"><code>&lt;section&gt;</code><span>A thematic group, usually with a heading</span></div>
+        <div class="tag-chip"><code>&lt;aside&gt;</code><span>Side content — related links, tips</span></div>
+        <div class="tag-chip"><code>&lt;footer&gt;</code><span>Footer for the page or section</span></div>
+        <div class="tag-chip"><code>&lt;div&gt;</code><span>Use only when no better semantic tag exists</span></div>
+      </div>
+    </section>
+
+    <!-- ================= FORMS ================= -->
+    <section class="topic" id="forms">
+      <div class="eyebrow">Concept 08</div>
+      <h2>Forms</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>A form is a paper application form come to life: blank fields for you to fill in (name, email), checkboxes to tick, a dropdown of pre-set choices, and a "Submit" button that hands the completed form to whoever's collecting it.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p>An HTML form collects user input. The <code>&lt;form&gt;</code> element wraps a set of <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, and <code>&lt;textarea&gt;</code> controls and, when submitted, sends their values to a server.</p>
+        </div>
+      </div>
+
+      <pre>&lt;<span class="tagname">form</span> <span class="attr">action</span>=<span class="val">"#"</span> <span class="attr">method</span>=<span class="val">"post"</span>&gt;
+  &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"name"</span>&gt;Full name&lt;/<span class="tagname">label</span>&gt;
+  &lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"name"</span> <span class="attr">name</span>=<span class="val">"name"</span> <span class="attr">required</span>/&gt;
+
+  &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"email"</span>&gt;Email&lt;/<span class="tagname">label</span>&gt;
+  &lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">id</span>=<span class="val">"email"</span> <span class="attr">name</span>=<span class="val">"email"</span> <span class="attr">required</span>/&gt;
+
+  &lt;<span class="tagname">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>&gt;Send&lt;/<span class="tagname">button</span>&gt;
+&lt;/<span class="tagname">form</span>&gt;</pre>
+
+      <table>
+        <thead><tr><th>Part</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;form&gt;</code></td><td>Container for inputs</td></tr>
+          <tr><td><code>action</code></td><td>Where to send the data — a server URL</td></tr>
+          <tr><td><code>method</code></td><td>Usually <code>get</code> or <code>post</code></td></tr>
+          <tr><td><code>&lt;label for="id"&gt;</code></td><td>Label linked to an input with a matching <code>id</code></td></tr>
+          <tr><td><code>name</code></td><td>Name of the value when the form is submitted</td></tr>
+          <tr><td><code>required</code></td><td>Browser blocks an empty submit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout danger">
+        <span class="lbl">Non-negotiable rule</span>
+        Every <code>&lt;input&gt;</code> needs a <code>&lt;label&gt;</code> (with a matching <code>for</code>/<code>id</code> pair) <b>and</b> a <code>name</code>. Without a matching <code>for</code>/<code>id</code>, clicking the label text won't focus the field — and without <code>name</code>, the value never gets submitted at all.
+      </div>
+
+      <h3 class="sub">Input types</h3>
+      <div class="input-grid">
+        <div class="input-chip"><code>text</code><p>Normal text field</p></div>
+        <div class="input-chip"><code>email</code><p>Checks email format + shows email keyboard on phones</p></div>
+        <div class="input-chip"><code>password</code><p>Hides typed characters</p></div>
+        <div class="input-chip"><code>tel</code><p>Shows phone keypad on phones</p></div>
+        <div class="input-chip"><code>number</code><p>Number-only field</p></div>
+        <div class="input-chip"><code>date</code><p>Native date picker</p></div>
+        <div class="input-chip"><code>url</code><p>Checks URL format</p></div>
+        <div class="input-chip"><code>file</code><p>Upload a file</p></div>
+        <div class="input-chip"><code>checkbox</code><p>On/off option</p></div>
+        <div class="input-chip"><code>radio</code><p>Choose one option from a group</p></div>
+        <div class="input-chip"><code>submit</code><p>Submits the form</p></div>
+      </div>
+
+      <h3 class="sub">Full contact form example</h3>
+      <pre>&lt;<span class="tagname">form</span> <span class="attr">action</span>=<span class="val">"#"</span> <span class="attr">method</span>=<span class="val">"post"</span>&gt;
+  &lt;<span class="tagname">div</span>&gt;
+    &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"name"</span>&gt;Full name&lt;/<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"name"</span> <span class="attr">name</span>=<span class="val">"name"</span> <span class="attr">required</span> <span class="attr">autocomplete</span>=<span class="val">"name"</span>/&gt;
+  &lt;/<span class="tagname">div</span>&gt;
+
+  &lt;<span class="tagname">div</span>&gt;
+    &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"email"</span>&gt;Email&lt;/<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">id</span>=<span class="val">"email"</span> <span class="attr">name</span>=<span class="val">"email"</span> <span class="attr">required</span>
+      <span class="attr">placeholder</span>=<span class="val">"you@example.com"</span>/&gt;
+  &lt;/<span class="tagname">div</span>&gt;
+
+  &lt;<span class="tagname">div</span>&gt;
+    &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"phone"</span>&gt;Phone&lt;/<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"tel"</span> <span class="attr">id</span>=<span class="val">"phone"</span> <span class="attr">name</span>=<span class="val">"phone"</span>/&gt;
+  &lt;/<span class="tagname">div</span>&gt;
+
+  &lt;<span class="tagname">fieldset</span>&gt;
+    &lt;<span class="tagname">legend</span>&gt;Preferred track&lt;/<span class="tagname">legend</span>&gt;
+    &lt;<span class="tagname">label</span>&gt;&lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"track"</span> <span class="attr">value</span>=<span class="val">"frontend"</span>/&gt; Frontend&lt;/<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">label</span>&gt;&lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"track"</span> <span class="attr">value</span>=<span class="val">"backend"</span>/&gt; Backend&lt;/<span class="tagname">label</span>&gt;
+  &lt;/<span class="tagname">fieldset</span>&gt;
+
+  &lt;<span class="tagname">div</span>&gt;
+    &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"topic"</span>&gt;Topic&lt;/<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">select</span> <span class="attr">id</span>=<span class="val">"topic"</span> <span class="attr">name</span>=<span class="val">"topic"</span>&gt;
+      &lt;<span class="tagname">option</span> <span class="attr">value</span>=<span class="val">""</span>&gt;Choose one&lt;/<span class="tagname">option</span>&gt;
+      &lt;<span class="tagname">option</span> <span class="attr">value</span>=<span class="val">"help"</span>&gt;Help&lt;/<span class="tagname">option</span>&gt;
+      &lt;<span class="tagname">option</span> <span class="attr">value</span>=<span class="val">"feedback"</span>&gt;Feedback&lt;/<span class="tagname">option</span>&gt;
+    &lt;/<span class="tagname">select</span>&gt;
+  &lt;/<span class="tagname">div</span>&gt;
+
+  &lt;<span class="tagname">div</span>&gt;
+    &lt;<span class="tagname">label</span> <span class="attr">for</span>=<span class="val">"message"</span>&gt;Message&lt;/<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">textarea</span> <span class="attr">id</span>=<span class="val">"message"</span> <span class="attr">name</span>=<span class="val">"message"</span> <span class="attr">rows</span>=<span class="val">"4"</span>&gt;&lt;/<span class="tagname">textarea</span>&gt;
+  &lt;/<span class="tagname">div</span>&gt;
+
+  &lt;<span class="tagname">label</span>&gt;
+    &lt;<span class="tagname">input</span> <span class="attr">type</span>=<span class="val">"checkbox"</span> <span class="attr">name</span>=<span class="val">"terms"</span> <span class="attr">required</span>/&gt;
+    I accept the terms
+  &lt;/<span class="tagname">label</span>&gt;
+
+  &lt;<span class="tagname">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>&gt;Send&lt;/<span class="tagname">button</span>&gt;
+&lt;/<span class="tagname">form</span>&gt;</pre>
+
+      <div class="def-grid">
+        <dt>&lt;textarea&gt;</dt><dd>Multi-line text input.</dd>
+        <dt>&lt;select&gt; + &lt;option&gt;</dt><dd>A dropdown of choices.</dd>
+        <dt>&lt;fieldset&gt; + &lt;legend&gt;</dt><dd>Groups related controls (e.g. a set of radio buttons) with a group title.</dd>
+        <dt>placeholder</dt><dd>A grey hint shown inside an empty field — it disappears on typing and is <b>not</b> a substitute for a real <code>&lt;label&gt;</code>.</dd>
+      </div>
+    </section>
+
+    <!-- ================= TABLES ================= -->
+    <section class="topic" id="tables">
+      <div class="eyebrow">Concept 09</div>
+      <h2>Tables</h2>
+      <div class="callout warn">
+        <span class="lbl">Golden rule</span>
+        Use <code>&lt;table&gt;</code> for tabular <b>data</b> only — grades, prices, schedules. Never use a table just to lay out a page's boxes; that's what CSS is for (Week 03).
+      </div>
+
+      <pre>&lt;<span class="tagname">table</span>&gt;
+  &lt;<span class="tagname">caption</span>&gt;My tools&lt;/<span class="tagname">caption</span>&gt;
+  &lt;<span class="tagname">thead</span>&gt;
+    &lt;<span class="tagname">tr</span>&gt;
+      &lt;<span class="tagname">th</span> <span class="attr">scope</span>=<span class="val">"col"</span>&gt;Tool&lt;/<span class="tagname">th</span>&gt;
+      &lt;<span class="tagname">th</span> <span class="attr">scope</span>=<span class="val">"col"</span>&gt;Comfort&lt;/<span class="tagname">th</span>&gt;
+    &lt;/<span class="tagname">tr</span>&gt;
+  &lt;/<span class="tagname">thead</span>&gt;
+  &lt;<span class="tagname">tbody</span>&gt;
+    &lt;<span class="tagname">tr</span>&gt;
+      &lt;<span class="tagname">th</span> <span class="attr">scope</span>=<span class="val">"row"</span>&gt;HTML&lt;/<span class="tagname">th</span>&gt;
+      &lt;<span class="tagname">td</span>&gt;Strong&lt;/<span class="tagname">td</span>&gt;
+    &lt;/<span class="tagname">tr</span>&gt;
+    &lt;<span class="tagname">tr</span>&gt;
+      &lt;<span class="tagname">th</span> <span class="attr">scope</span>=<span class="val">"row"</span>&gt;CSS&lt;/<span class="tagname">th</span>&gt;
+      &lt;<span class="tagname">td</span>&gt;Beginner&lt;/<span class="tagname">td</span>&gt;
+    &lt;/<span class="tagname">tr</span>&gt;
+  &lt;/<span class="tagname">tbody</span>&gt;
+&lt;/<span class="tagname">table</span>&gt;</pre>
+
+      <table>
+        <thead><tr><th>Tag</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;table&gt;</code></td><td>The table itself</td></tr>
+          <tr><td><code>&lt;caption&gt;</code></td><td>Table title</td></tr>
+          <tr><td><code>&lt;thead&gt;</code> / <code>&lt;tbody&gt;</code></td><td>Header section vs. body section</td></tr>
+          <tr><td><code>&lt;tr&gt;</code></td><td>Table row</td></tr>
+          <tr><td><code>&lt;th&gt;</code></td><td>Header cell</td></tr>
+          <tr><td><code>&lt;td&gt;</code></td><td>Data cell</td></tr>
+          <tr><td><code>scope="col"</code> / <code>scope="row"</code></td><td>Tells assistive tech what the header describes</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= ID/CLASS/COMMENTS ================= -->
+    <section class="topic" id="id-class">
+      <div class="eyebrow">Concept 10</div>
+      <h2><code>id</code>, <code>class</code> &amp; Comments</h2>
+      <div class="dual">
+        <div class="card layman">
+          <span class="tag">Layman's example</span>
+          <p>An <code>id</code> is like a person's national ID number — exactly one per person, never shared. A <code>class</code> is like a job title — many people can share "Teacher", and one person can hold several titles at once.</p>
+        </div>
+        <div class="card tech">
+          <span class="tag">Technical definition</span>
+          <p><code>id</code> and <code>class</code> name elements so you can link to them, style them with CSS (Week 03), or find them with JavaScript later.</p>
+        </div>
+      </div>
+
+      <pre>&lt;<span class="tagname">h2</span> <span class="attr">id</span>=<span class="val">"skills"</span>&gt;My Skills&lt;/<span class="tagname">h2</span>&gt;
+&lt;<span class="tagname">p</span> <span class="attr">class</span>=<span class="val">"bio"</span>&gt;I am learning web engineering.&lt;/<span class="tagname">p</span>&gt;
+&lt;<span class="tagname">p</span> <span class="attr">class</span>=<span class="val">"bio highlight"</span>&gt;HTML is my favorite so far.&lt;/<span class="tagname">p</span>&gt;
+
+&lt;<span class="tagname">a</span> <span class="attr">href</span>=<span class="val">"#skills"</span>&gt;Jump to skills&lt;/<span class="tagname">a</span>&gt;</pre>
+
+      <table>
+        <thead><tr><th>Attribute</th><th>Rule</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>Must be <b>unique</b> on the page</td><td>One specific element — <code>#skills</code></td></tr>
+          <tr><td><code>class</code></td><td>Can be reused on many elements</td><td>A group of similar elements — <code>.bio</code></td></tr>
+          <tr><td>Many classes</td><td>Separate with a space</td><td><code>class="bio highlight"</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <span class="lbl">Naming convention</span>
+        <code>id</code> names should not start with a number. Prefer lowercase-with-hyphens: <code>contact-form</code>, not <code>Contact Form</code>.
+      </div>
+
+      <h3 class="sub">Comments</h3>
+      <p>HTML comments are never shown in the browser — use them as notes for yourself while building.</p>
+      <pre>&lt;<span class="cmt">!-- This is a comment --</span>&gt;
+&lt;<span class="cmt">!-- Main profile content starts here --</span>&gt;
+&lt;<span class="tagname">article</span>&gt;
+  &lt;<span class="tagname">h2</span>&gt;About me&lt;/<span class="tagname">h2</span>&gt;
+&lt;/<span class="tagname">article</span>&gt;</pre>
+      <div class="callout danger">
+        <span class="lbl">Security reminder</span>
+        Never put secrets or passwords in comments — anyone can right-click → View Source and read them.
+      </div>
+    </section>
+
+    <!-- ================= MISTAKES ================= -->
+    <section class="topic" id="mistakes">
+      <div class="eyebrow">Reference</div>
+      <h2>Common Mistakes</h2>
+      <table>
+        <thead><tr><th>Mistake</th><th>Problem</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Only <code>&lt;div&gt;</code> tags</td><td>No meaning for browsers / screen readers</td><td>Use semantic tags</td></tr>
+          <tr><td>Missing <code>alt</code></td><td>Image has no text alternative</td><td>Add a real description</td></tr>
+          <tr><td>Label not linked</td><td>Clicking the label does nothing</td><td><code>for</code> must match <code>id</code></td></tr>
+          <tr><td>Skipped heading levels</td><td>Broken page outline</td><td><code>h1</code> then <code>h2</code> then <code>h3</code></td></tr>
+          <tr><td>Using <code>&lt;br&gt;</code> for spacing</td><td>Hard to maintain</td><td>Use CSS in Week 03</td></tr>
+          <tr><td><code>target="_blank"</code> alone</td><td>Less safe</td><td>Add <code>rel="noopener noreferrer"</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= GLOSSARY ================= -->
+    <section class="topic" id="glossary">
+      <div class="eyebrow">Reference</div>
+      <h2>Full Glossary — Every Term Defined</h2>
+      <dl class="glossary-list">
+        <div class="glossary-item"><dt>Element</dt><dd>A start tag, its content, and its end tag together — the basic building block of HTML.</dd></div>
+        <div class="glossary-item"><dt>Attribute</dt><dd>A key="value" pair inside a start tag that gives extra information about that element.</dd></div>
+        <div class="glossary-item"><dt>Empty / void element</dt><dd>An element with no content and no end tag, e.g. <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;input&gt;</code>.</dd></div>
+        <div class="glossary-item"><dt>Semantic element</dt><dd>A tag that describes its own meaning, e.g. <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>.</dd></div>
+        <div class="glossary-item"><dt>alt text</dt><dd>Descriptive text on an <code>&lt;img&gt;</code>, shown if the image fails and read by screen readers.</dd></div>
+        <div class="glossary-item"><dt>Form</dt><dd>An HTML structure (<code>&lt;form&gt;</code>) that collects user input and submits it, usually to a server.</dd></div>
+        <div class="glossary-item"><dt>Label</dt><dd>Text (<code>&lt;label&gt;</code>) describing an input; linked via matching <code>for</code>/<code>id</code>.</dd></div>
+        <div class="glossary-item"><dt>Placeholder</dt><dd>A hint shown inside an empty input field — disappears on typing, not a replacement for a label.</dd></div>
+        <div class="glossary-item"><dt>Fieldset / legend</dt><dd>A box (<code>&lt;fieldset&gt;</code>) that groups related form controls, with a title (<code>&lt;legend&gt;</code>).</dd></div>
+        <div class="glossary-item"><dt>id</dt><dd>A unique identifier for one specific element on a page.</dd></div>
+        <div class="glossary-item"><dt>class</dt><dd>A reusable identifier that can be shared across many elements.</dd></div>
+        <div class="glossary-item"><dt>HTML comment</dt><dd>Text between <code>&lt;!--</code> and <code>--&gt;</code>, never shown in the browser.</dd></div>
+        <div class="glossary-item"><dt>Validator</dt><dd>A tool (e.g. validator.w3.org) that checks your HTML follows the spec correctly.</dd></div>
+        <div class="glossary-item"><dt>rel="noopener noreferrer"</dt><dd>Link attribute that improves security and privacy for links opened in a new tab.</dd></div>
+        <div class="glossary-item"><dt>scope (table)</dt><dd>Attribute on <code>&lt;th&gt;</code> telling assistive tech whether the header describes a column or a row.</dd></div>
+      </dl>
+    </section>
+
+    <!-- ================= CHECKLIST ================= -->
+    <section class="topic" id="checklist">
+      <div class="eyebrow">Self-Check</div>
+      <h2>Before Week 03</h2>
+      <ul class="check">
+        <li>I can write a basic HTML document from memory.</li>
+        <li>I know when to use <code>article</code>, <code>section</code>, <code>aside</code>, vs. plain <code>div</code>.</li>
+        <li>Every image on my page has a meaningful <code>alt</code>.</li>
+        <li>Every input on my page has a <code>label</code> and a <code>name</code>.</li>
+        <li>I know the difference between <code>id</code> and <code>class</code>.</li>
+        <li>My page passes the W3C validator with zero errors.</li>
+      </ul>
+    </section>
+
+    <footer class="page">
+      <span>Web Engineering — Week 02 Easy Notes</span>
+      <span>Companion file: <code>week02_tasksheet.html</code></span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
