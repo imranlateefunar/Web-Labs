@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semantic Teardown — Annotated Homepage</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #17202a;
+    }
+
+    /* Every semantic region has a visible border and a hover tooltip. */
+    .semantic {
+      position: relative;
+      border: 3px solid;
+      border-radius: 10px;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .semantic::after {
+      content: attr(data-label);
+      position: absolute;
+      z-index: 100;
+      top: 10px;
+      right: 10px;
+      padding: 7px 12px;
+      border-radius: 7px;
+      background: #17202a;
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      opacity: 0;
+      transform: translateY(-5px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,.18);
+    }
+    .semantic:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0,0,0,.13);
+    }
+    .semantic:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .header {
+      border-color: #e67e22;
+      background: #fff4e8;
+      padding: 24px 6%;
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #e67e22;
+      color: white;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .brand h1 { margin: 0; font-size: 25px; }
+    .brand p { margin: 3px 0 0; color: #667085; font-size: 13px; }
+
+    .search {
+      padding: 11px 15px;
+      width: 250px;
+      border: 1px solid #ccd2d9;
+      border-radius: 8px;
+      background: white;
+    }
+
+    .nav {
+      border-color: #2980b9;
+      background: #eaf5fc;
+      padding: 0 6%;
+    }
+
+    .nav ul {
+      max-width: 1180px;
+      margin: auto;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 5px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 16px 18px;
+      color: #164e70;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 7px;
+    }
+
+    .nav a:hover { background: #d5ebf9; }
+
+    .page {
+      max-width: 1180px;
+      margin: 25px auto;
+      padding: 0 18px;
+    }
+
+    .main {
+      border-color: #27ae60;
+      background: #f0fff6;
+      padding: 20px;
+    }
+
+    .main-heading {
+      margin: 0 0 18px;
+      font-size: 28px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 20px;
+    }
+
+    .article {
+      border-color: #8e44ad;
+      background: #fbf3ff;
+      padding: 22px;
+    }
+
+    .article h2 { margin-top: 0; }
+    .article p { line-height: 1.7; color: #45505c; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      padding: 17px;
+    }
+
+    .card h3 { margin: 0 0 7px; font-size: 17px; }
+    .card p { margin: 0; font-size: 14px; line-height: 1.5; }
+
+    .aside {
+      border-color: #c0392b;
+      background: #fff1ef;
+      padding: 20px;
+    }
+
+    .aside h2 { margin-top: 0; font-size: 20px; }
+
+    .aside ul {
+      padding-left: 20px;
+      line-height: 2;
+      color: #555;
+    }
+
+    .notice {
+      padding: 12px;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid #f0c4be;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      border-color: #34495e;
+      background: #edf0f2;
+      padding: 25px 6%;
+    }
+
+    .footer-inner {
+      max-width: 1180px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer p { margin: 0; color: #58636e; }
+    .footer a { color: #34495e; margin-left: 15px; }
+
+    .legend {
+      max-width: 1180px;
+      margin: 0 auto 25px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid #d8dde2;
+      color: #4c5660;
+      font-size: 14px;
+    }
+
+    .legend strong { color: #17202a; }
+
+    @media (max-width: 760px) {
+      .header-inner, .footer-inner { flex-direction: column; align-items: stretch; }
+      .search { width: 100%; }
+      .nav ul { overflow-x: auto; }
+      .content-grid { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="semantic header" data-label="HEADER">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>Semantic Learning Hub</h1>
+          <p>Understanding modern web structure</p>
+        </div>
+      </div>
+      <input class="search" type="search" placeholder="Search the site..." aria-label="Search">
+    </div>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav class="semantic nav" data-label="NAV">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">HTML</a></li>
+      <li><a href="#">CSS</a></li>
+      <li><a href="#">Accessibility</a></li>
+      <li><a href="#">Resources</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <!-- MAIN -->
+    <main class="semantic main" data-label="MAIN">
+      <h2 class="main-heading">Welcome to the Semantic Web</h2>
+
+      <div class="content-grid">
+
+        <!-- ARTICLE -->
+        <article class="semantic article" data-label="ARTICLE">
+          <h2>Why Semantic HTML Matters</h2>
+          <p>
+            Semantic HTML uses meaningful elements to describe the purpose of
+            content. Elements such as <strong>header</strong>, <strong>nav</strong>,
+            <strong>main</strong>, <strong>article</strong>, <strong>aside</strong>,
+            and <strong>footer</strong> help browsers, search engines, and assistive
+            technologies understand a webpage.
+          </p>
+
+          <p>
+            A well-structured page separates navigation from primary content and
+            supplementary information. This makes the document easier to read,
+            maintain, and access.
+          </p>
+
+          <div class="cards">
+            <section class="card">
+              <h3>Clear Structure</h3>
+              <p>Meaningful elements make the layout and purpose of content easier to understand.</p>
+            </section>
+            <section class="card">
+              <h3>Better Accessibility</h3>
+              <p>Assistive technologies can navigate important page regions more effectively.</p>
+            </section>
+            <section class="card">
+              <h3>SEO Friendly</h3>
+              <p>Search engines can better interpret the organization and meaning of content.</p>
+            </section>
+            <section class="card">
+              <h3>Maintainable Code</h3>
+              <p>Developers can quickly identify what each part of the page is responsible for.</p>
+            </section>
+          </div>
+        </article>
+
+        <!-- ASIDE -->
+        <aside class="semantic aside" data-label="ASIDE">
+          <h2>Quick Links</h2>
+          <div class="notice">
+            This is supplementary content. It supports the main article but is not
+            part of the article's primary flow.
+          </div>
+          <ul>
+            <li>HTML Semantic Elements</li>
+            <li>Accessibility Basics</li>
+            <li>Web Page Structure</li>
+            <li>HTML5 Reference</li>
+            <li>Learning Resources</li>
+          </ul>
+        </aside>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="semantic footer" data-label="FOOTER">
+    <div class="footer-inner">
+      <p>© 2026 Semantic Learning Hub — Educational Demo</p>
+      <div>
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
+        <a href="#">About</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

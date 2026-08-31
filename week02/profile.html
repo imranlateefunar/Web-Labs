@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Personal portfolio and profile page for web engineering." />
+    <title>My Profile</title>
+  </head>
+  <body>
+    <!-- Header section -->
+    <header>
+      <h1>Imran Lateef Unar</h1>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main content -->
+    <main>
+      <article class="card" id="about">
+        <h2>About Me</h2>
+        <p class="muted">Computer Science student &amp; web engineering learner.</p>
+        <p>I enjoy building semantic, accessible, and responsive user interfaces.</p>
+
+        <figure>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3tgtMzaWr9PImGd_V5kIkHvjZNBzvnM9hIz2XZxiOMQ&s=10" alt="A professional portrait photo of Imran Lateef Unar" width="300" height="300" />
+          <figcaption>Imran Lateef Unar</figcaption>
+        </figure>
+
+        <section id="skills">
+          <h3>Skills</h3>
+          <ul>
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript</li>
+            <li>Git</li>
+          </ul>
+        </section>
+      </article>
+
+      <aside>
+        <h2>Currently learning</h2>
+        <p>Advanced CSS layouts and accessible HTML form patterns.</p>
+      </aside>
+    </main>
+
+    <!-- Form section -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <form action="#" method="post">
+        <div>
+          <label for="fullname">Full name</label>
+          <input type="text" id="fullname" name="fullname" required />
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com" />
+        </div>
+
+        <div>
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" />
+        </div>
+
+        <div>
+          <label for="topic">Topic</label>
+          <select id="topic" name="topic">
+            <option value="">Choose one</option>
+            <option value="help">Help</option>
+            <option value="feedback">Feedback</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+
+        <div>
+          <label>
+            <input type="checkbox" name="terms" required />
+            I accept the terms and conditions
+          </label>
+        </div>
+
+        <button type="submit">Send</button>
+      </form>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 Imran Lateef Unar &middot; <a href="mailto:imranlateefunar.bscsf24@iba-suk.edu.pk">Email me</a></p>
+    </footer>
+  </body>
+</html>

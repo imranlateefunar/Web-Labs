@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A short page summary for search engines." />
+    <title>Contact Us</title>
+  </head>
+  <body>
+  <header>
+    <h1>Contact Us:</h1>
+  </header>
+
+<section id="contact">
+
+  <form action="" method="post">
+    <div>
+      <label for="name">Full name</label>
+      <input type="text" id="name" name="name" required />
+    </div>
+
+    <div>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="you@example.com" />
+    </div>
+
+    <div>
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" name="phone" />
+    </div>
+
+    <div>
+      <label for="topic">Topic</label>
+      <select id="topic" name="topic">
+        <option value="">Choose one</option>
+        <option value="help">Help</option>
+        <option value="feedback">Feedback</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4"></textarea>
+    </div>
+
+    <label>
+      <input type="checkbox" name="terms" required />
+      I accept the terms
+    </label>
+
+    <button onclick="alert('Not sent , Try Again!')" type="submit">Send</button>
+  </form>
+</section>
+
+  </body>
+</html>
